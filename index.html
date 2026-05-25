@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="apple-mobile-web-app-title" content="Tether"/>
 <meta name="theme-color" content="#1B2E4B"/>
-<link rel="manifest" href="manifest.json"/>
+<link rel="manifest" href="/tether/manifest.json"/>
 <title>Tether</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -1952,7 +1952,7 @@ function init() {
   loadState();
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js').catch(function(){});
+    navigator.serviceWorker.register('/tether/service-worker.js').catch(function(){});
   }
 
   // Directness slider
