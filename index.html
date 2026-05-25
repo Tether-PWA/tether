@@ -64,9 +64,9 @@ body{
 #bottom-nav{
   position:absolute;
   bottom:0;left:0;right:0;
-  height:60px;
-  background:var(--white);
-  border-top:1px solid var(--g2);
+  height:72px;
+  background:#FFFFFF;
+  border-top:1px solid #E0E0E0;
   display:flex;
   z-index:100;
   padding-bottom:env(safe-area-inset-bottom,0px);
@@ -78,23 +78,25 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:3px;
+  gap:4px;
   background:none;border:none;
   cursor:pointer;
-  color:var(--g4);
+  color:#9E9E9E;
   font-family:inherit;
   font-size:10px;font-weight:500;
   letter-spacing:0.02em;
   padding:8px 0;
   transition:color 0.15s;
+  -webkit-tap-highlight-color:transparent;
+  min-width:0;
 }
-.tab-btn.active{color:var(--navy)}
-.tab-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+.tab-btn.active{color:#1B2E4B}
+.tab-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.5}
 
 /* TOAST */
 #toast{
   position:absolute;
-  bottom:76px;left:50%;
+  bottom:88px;left:50%;
   transform:translateX(-50%);
   background:var(--navy);
   color:var(--white);
@@ -274,7 +276,7 @@ input[type="range"]::-webkit-slider-thumb{
 .section-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--g4);margin:24px 0 10px}
 
 /* SCREEN PADDING */
-.screen-pad{padding:0 20px 80px}
+.screen-pad{padding:0 20px 88px}
 .screen-top{padding:20px 20px 0}
 
 /* DIVIDER */
@@ -717,6 +719,101 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 .cv-row-label{font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px}
 .cv-row-val{font-size:15px;color:var(--navy);line-height:1.4}
 .cv-partner-section{background:var(--g1);margin:0;padding:20px}
+
+/* ==============================
+   CONTRACT STEP SCREENS
+   ============================== */
+.contract-step-screen{
+  display:flex;flex-direction:column;
+  overflow:hidden!important;
+  background:var(--white);
+}
+.cs-header{padding:52px 28px 0;flex-shrink:0}
+.cs-step-label{
+  font-size:13px;font-weight:500;color:#9E9E9E;
+  margin-bottom:24px;letter-spacing:0.01em;
+}
+.cs-question{
+  font-size:26px;font-weight:600;color:var(--navy);
+  line-height:1.25;margin-bottom:32px;
+}
+.cs-scroll{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:0 28px;
+}
+.cs-textarea{
+  width:100%;min-height:120px;
+  border:none;outline:none;resize:none;
+  font-family:inherit;font-size:17px;color:var(--navy);
+  background:transparent;line-height:1.6;padding:0;
+}
+.cs-textarea::placeholder{color:var(--g3)}
+.cs-name-input{
+  width:100%;border:none;border-bottom:1.5px solid var(--g2);
+  outline:none;font-family:inherit;font-size:16px;color:var(--navy);
+  background:transparent;padding:0 0 12px;margin-bottom:28px;
+  transition:border-color 0.15s;
+}
+.cs-name-input:focus{border-color:var(--navy)}
+.cs-name-input::placeholder{color:var(--g3)}
+.cs-name-label{
+  font-size:12px;font-weight:600;color:var(--g4);
+  letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;
+}
+.cs-divider{height:1.5px;background:var(--g2);margin-bottom:0}
+.cs-partner-hint{
+  margin-top:28px;padding:14px 16px;
+  background:var(--g1);border-radius:10px;
+  margin-bottom:32px;
+}
+.cs-partner-hint-label{
+  font-size:11px;font-weight:600;color:var(--g4);
+  letter-spacing:0.05em;text-transform:uppercase;margin-bottom:5px;
+}
+.cs-partner-hint-text{font-size:13px;color:var(--g5);line-height:1.5;font-style:italic}
+.cs-footer{
+  flex-shrink:0;
+  padding:20px 28px calc(20px + env(safe-area-inset-bottom,0px));
+  background:var(--white);border-top:1px solid var(--g1);
+}
+.cs-btn{
+  display:block;width:100%;height:56px;
+  background:var(--navy);color:var(--white);
+  border:none;border-radius:14px;
+  font-family:inherit;font-size:16px;font-weight:600;
+  cursor:pointer;text-align:center;
+  transition:opacity 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.cs-btn:active{opacity:0.82}
+
+/* TIME SLOT PILLS */
+.time-slot-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:10px;padding-bottom:32px;
+}
+.time-slot-pill{
+  border:1.5px solid var(--navy);border-radius:999px;
+  padding:12px 6px;
+  font-family:inherit;font-size:14px;font-weight:500;
+  color:var(--navy);background:var(--white);
+  cursor:pointer;text-align:center;
+  transition:background 0.15s,color 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.time-slot-pill.selected{background:var(--navy);color:var(--white)}
+
+/* CONTRACT CONFIRMATION */
+#contract-confirm{
+  position:absolute;inset:0;
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s ease;
+  z-index:50;
+}
+#contract-confirm.active{opacity:1;pointer-events:all}
+.confirm-text{font-size:22px;font-weight:600;color:var(--navy);text-align:center}
 </style>
 </head>
 <body>
@@ -934,78 +1031,88 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
         <span class="tag">English</span>
       </div>
     </div>
-    <button class="btn-primary" style="width:100%;max-width:360px;margin-bottom:12px" onclick="showScreen('screen-contract','forward');populateContractScreen()">Set Up Your Contract</button>
+    <button class="btn-primary" style="width:100%;max-width:360px;margin-bottom:12px" onclick="populateContractScreen();showScreen('screen-contract-1','forward')">Set Up Your Contract</button>
     <button class="btn-ghost" style="width:100%;max-width:360px" onclick="showScreen('screen-matching','back');runMatchingAnimation()">Request a different match</button>
     <p class="trial-note">You have a 7-day trial period. After that, you can keep your partner or request a new match.</p>
   </div>
 </div>
 
-<!-- CONTRACT SETUP -->
-<div id="screen-contract" class="screen contract-screen">
-  <div class="contract-header">
-    <h2>The Contract</h2>
-    <p>Define your commitment. Own it.</p>
+<!-- CONTRACT STEP 1: What are you working on? -->
+<div id="screen-contract-1" class="screen contract-step-screen">
+  <div class="cs-header">
+    <p class="cs-step-label">Step 1 of 4</p>
+    <h2 class="cs-question">What are you working on?</h2>
   </div>
-  <div class="contract-scroll">
-    <div class="contract-body">
-      <div class="form-group">
-        <label>Your first name</label>
-        <input type="text" id="c-name" placeholder="What should we call you?"/>
-      </div>
-      <div class="form-group">
-        <label>I am working on...</label>
-        <textarea id="c-working-on" rows="3" placeholder="e.g. launching my first product by end of the month"></textarea>
-      </div>
-      <div class="form-group">
-        <label>My biggest thing to overcome is...</label>
-        <textarea id="c-overcoming" rows="3" placeholder="Be honest with yourself"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Check-in frequency</label>
-        <div class="freq-pills">
-          <button class="freq-pill selected" data-freq="daily">Daily</button>
-          <button class="freq-pill" data-freq="5x">5x per week</button>
-          <button class="freq-pill" data-freq="every-other">Every other day</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Call me out when...</label>
-        <textarea id="c-callout" rows="2" placeholder="e.g. I go quiet or start making excuses"></textarea>
-      </div>
-      <div class="form-group">
-        <label>This matters to me because...</label>
-        <textarea id="c-because" rows="3" placeholder="What's driving you?"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Daily check-in time</label>
-        <input type="time" id="c-time" value="09:00"/>
-      </div>
-
-      <div class="divider-label"><span>Jordan's commitment</span></div>
-      <div class="contract-partner-section">
-        <h4>Jordan's side</h4>
-        <div class="contract-partner-row">
-          <p>Working on</p>
-          <p id="cp-working-on">growing my freelance design business to full-time income</p>
-        </div>
-        <div class="contract-partner-row">
-          <p>Overcoming</p>
-          <p id="cp-overcoming">fear of putting my work out there and charging what I'm worth</p>
-        </div>
-        <div class="contract-partner-row">
-          <p>Call me out when</p>
-          <p id="cp-callout">I start second-guessing myself or disappear for more than a day</p>
-        </div>
-        <div class="contract-partner-row">
-          <p>Why it matters</p>
-          <p id="cp-why">I've played it safe my whole life and I'm done with that</p>
-        </div>
-      </div>
+  <div class="cs-scroll">
+    <p class="cs-name-label">Your name</p>
+    <input class="cs-name-input" type="text" id="c1-name" placeholder="What should we call you?"/>
+    <div class="cs-divider"></div>
+    <textarea class="cs-textarea" id="c1-working-on" placeholder="Be specific. Vague goals don't get done." rows="5" style="margin-top:20px"></textarea>
+    <div class="cs-partner-hint">
+      <p class="cs-partner-hint-label">Jordan is working on</p>
+      <p class="cs-partner-hint-text" id="cp1-working-on">growing my freelance design business to full-time income</p>
     </div>
   </div>
-  <div class="contract-sign">
-    <button class="btn-primary" onclick="signContract()">Sign the Contract</button>
+  <div class="cs-footer">
+    <button class="cs-btn" onclick="continueContract1()">Continue</button>
   </div>
+</div>
+
+<!-- CONTRACT STEP 2: Call me out when -->
+<div id="screen-contract-2" class="screen contract-step-screen">
+  <div class="cs-header">
+    <p class="cs-step-label">Step 2 of 4</p>
+    <h2 class="cs-question">Call me out when...</h2>
+  </div>
+  <div class="cs-scroll">
+    <div class="cs-divider"></div>
+    <textarea class="cs-textarea" id="c2-callout" placeholder="What does giving up look like for you?" rows="5" style="margin-top:20px"></textarea>
+    <div class="cs-partner-hint">
+      <p class="cs-partner-hint-label">Call Jordan out when</p>
+      <p class="cs-partner-hint-text" id="cp2-callout">they start second-guessing themselves or disappear for more than a day</p>
+    </div>
+  </div>
+  <div class="cs-footer">
+    <button class="cs-btn" onclick="continueContract2()">Continue</button>
+  </div>
+</div>
+
+<!-- CONTRACT STEP 3: Check-in time slots -->
+<div id="screen-contract-3" class="screen contract-step-screen">
+  <div class="cs-header">
+    <p class="cs-step-label">Step 3 of 4</p>
+    <h2 class="cs-question">When do you want to check in?</h2>
+  </div>
+  <div class="cs-scroll">
+    <div class="time-slot-grid" id="time-slot-grid"></div>
+  </div>
+  <div class="cs-footer">
+    <button class="cs-btn" onclick="continueContract3()">Continue</button>
+  </div>
+</div>
+
+<!-- CONTRACT STEP 4: Why is this time different? -->
+<div id="screen-contract-4" class="screen contract-step-screen">
+  <div class="cs-header">
+    <p class="cs-step-label">Step 4 of 4</p>
+    <h2 class="cs-question">Why is this time different?</h2>
+  </div>
+  <div class="cs-scroll">
+    <div class="cs-divider"></div>
+    <textarea class="cs-textarea" id="c4-because" placeholder="Say it like you mean it." rows="6" style="margin-top:20px"></textarea>
+    <div class="cs-partner-hint">
+      <p class="cs-partner-hint-label">Jordan's why</p>
+      <p class="cs-partner-hint-text" id="cp4-why">I've played it safe my whole life and I'm done with that</p>
+    </div>
+  </div>
+  <div class="cs-footer">
+    <button class="cs-btn" onclick="signContract()">Sign the contract</button>
+  </div>
+</div>
+
+<!-- CONTRACT SIGNED CONFIRMATION -->
+<div id="contract-confirm">
+  <p class="confirm-text">Contract signed.</p>
 </div>
 
 <!-- HOME -->
@@ -1283,19 +1390,19 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 <!-- BOTTOM NAV -->
 <nav id="bottom-nav" class="hidden">
   <button class="tab-btn active" data-screen="screen-home">
-    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
     Home
   </button>
   <button class="tab-btn" data-screen="screen-partner">
-    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M21 21v-2a4 4 0 00-3-3.85"/></svg>
     Partner
   </button>
   <button class="tab-btn" data-screen="screen-profile">
-    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
     Profile
   </button>
   <button class="tab-btn" data-screen="screen-settings">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
     Settings
   </button>
 </nav>
@@ -1345,6 +1452,7 @@ let activeTab = 'screen-home';
 let obAnswers = { q1: null, q2: null, q3: null, q4: 3, q5: null, q6: null };
 let mediaRecorder = null, audioChunks = [], recordingInterval = null, recordingTimeout = null;
 let recordingStartTime = 0, pendingVoiceBase64 = null, pendingVoiceBlob = null, pendingVoiceDuration = 0;
+let selectedTimeSlot = '09:00';
 
 // --- STATE ---
 function loadState() {
@@ -1494,31 +1602,67 @@ function buildPartnerContract() {
 
 function populateContractScreen() {
   var pc = buildPartnerContract();
-  document.getElementById('cp-working-on').textContent = pc.workingOn;
-  document.getElementById('cp-overcoming').textContent = pc.overcoming;
-  document.getElementById('cp-callout').textContent = pc.callout;
-  document.getElementById('cp-why').textContent = pc.why;
+  var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+  set('cp1-working-on', pc.workingOn);
+  set('cp2-callout', pc.callout);
+  set('cp4-why', pc.why);
+}
+
+function continueContract1() {
+  var workingOn = document.getElementById('c1-working-on').value.trim();
+  if (!workingOn) { showToast('Tell us what you\'re working on.'); return; }
+  showScreen('screen-contract-2', 'forward');
+}
+
+function continueContract2() {
+  showScreen('screen-contract-3', 'forward');
+  populateTimeSlots();
+}
+
+function continueContract3() {
+  showScreen('screen-contract-4', 'forward');
+}
+
+function populateTimeSlots() {
+  var q3 = obAnswers.q3 || (state.onboardingAnswers && state.onboardingAnswers.q3) || 'morning';
+  var slotMap = {
+    morning:   ['06:00','07:00','08:00','09:00','10:00','11:00'],
+    afternoon: ['11:00','12:00','13:00','14:00','15:00','16:00'],
+    evening:   ['16:00','17:00','18:00','19:00','20:00','21:00'],
+    late:      ['21:00','22:00','23:00','00:00','01:00','02:00']
+  };
+  var times = slotMap[q3] || slotMap.morning;
+  selectedTimeSlot = times[2];
+  var grid = document.getElementById('time-slot-grid');
+  grid.innerHTML = '';
+  times.forEach(function(t) {
+    var btn = document.createElement('button');
+    btn.className = 'time-slot-pill' + (t === selectedTimeSlot ? ' selected' : '');
+    btn.textContent = formatTime(t);
+    btn.onclick = function() {
+      selectedTimeSlot = t;
+      grid.querySelectorAll('.time-slot-pill').forEach(function(p) { p.classList.remove('selected'); });
+      btn.classList.add('selected');
+    };
+    grid.appendChild(btn);
+  });
 }
 
 function signContract() {
-  var name = document.getElementById('c-name').value.trim();
-  var workingOn = document.getElementById('c-working-on').value.trim();
-  var overcoming = document.getElementById('c-overcoming').value.trim();
-  var callout = document.getElementById('c-callout').value.trim();
-  var because = document.getElementById('c-because').value.trim();
-  var checkinTime = document.getElementById('c-time').value || '09:00';
-  var freq = (document.querySelector('.freq-pill.selected') || {}).dataset && document.querySelector('.freq-pill.selected').dataset.freq || 'daily';
+  var name     = (document.getElementById('c1-name').value || '').trim() || 'You';
+  var workingOn = (document.getElementById('c1-working-on').value || '').trim();
+  var callout   = (document.getElementById('c2-callout').value || '').trim();
+  var because   = (document.getElementById('c4-because').value || '').trim();
 
-  if (!workingOn || !overcoming) { showToast('Please fill in the required fields.'); return; }
+  if (!because) { showToast('Say why this time is different.'); return; }
 
-  name = name || 'You';
   state.user.name = name;
   state.user.initials = name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0,2) || 'YO';
-  state.user.checkinTime = checkinTime;
+  state.user.checkinTime = selectedTimeSlot || '09:00';
 
   var pc = buildPartnerContract();
   state.contract = {
-    user: { workingOn: workingOn, overcoming: overcoming, callout: callout, because: because, frequency: freq, checkinTime: checkinTime },
+    user: { workingOn: workingOn, callout: callout, because: because, overcoming: '', frequency: 'daily', checkinTime: selectedTimeSlot || '09:00' },
     partner: pc,
     signedAt: new Date().toISOString()
   };
@@ -1526,14 +1670,20 @@ function signContract() {
   state.weekStartDate = getMondayISO();
   saveState();
 
-  navHistory = [];
-  showScreen('screen-home', 'forward');
-  renderHome();
-  document.getElementById('bottom-nav').classList.remove('hidden');
-  document.querySelectorAll('.tab-btn').forEach(function(b) {
-    b.classList.toggle('active', b.dataset.screen === 'screen-home');
-  });
-  setTimeout(function() { renderNotifBanner(); }, 800);
+  // Brief confirmation before going home
+  var confirmEl = document.getElementById('contract-confirm');
+  confirmEl.classList.add('active');
+  setTimeout(function() {
+    confirmEl.classList.remove('active');
+    navHistory = [];
+    showScreen('screen-home', 'forward');
+    renderHome();
+    document.getElementById('bottom-nav').classList.remove('hidden');
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.screen === 'screen-home');
+    });
+    setTimeout(function() { renderNotifBanner(); }, 800);
+  }, 1500);
 }
 
 // --- HOME ---
@@ -1961,14 +2111,6 @@ function init() {
     slider.addEventListener('input', function() { updateDirectness(this.value); });
     updateDirectness(3);
   }
-
-  // Freq pills
-  document.querySelectorAll('.freq-pill').forEach(function(p) {
-    p.addEventListener('click', function() {
-      document.querySelectorAll('.freq-pill').forEach(function(pp) { pp.classList.remove('selected'); });
-      p.classList.add('selected');
-    });
-  });
 
   // Bottom nav
   document.querySelectorAll('.tab-btn').forEach(function(btn) {
