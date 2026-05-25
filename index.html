@@ -1,21 +1,2007 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0f0f0f" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Tether" />
-  <title>Tether</title>
-  <link rel="manifest" href="manifest.json" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Tether"/>
+<meta name="theme-color" content="#1B2E4B"/>
+<link rel="manifest" href="manifest.json"/>
+<title>Tether</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #1B2E4B;
+  --bg: #F7F8FA;
+  --white: #FFFFFF;
+  --g1: #F0F2F5;
+  --g2: #E2E6EC;
+  --g3: #C8D0DB;
+  --g4: #9AAABE;
+  --g5: #6B7A8D;
+  --success: #27AE60;
+  --warning: #E67E22;
+  --danger: #C0392B;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  background:var(--navy);
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  -webkit-font-smoothing:antialiased;
+}
+#app{
+  position:relative;
+  width:100%;
+  max-width:480px;
+  height:100dvh;
+  height:100vh;
+  overflow:hidden;
+  background:var(--bg);
+}
+
+/* SCREENS */
+.screen{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  background:var(--bg);
+}
+.screen.active{opacity:1;pointer-events:all;z-index:1}
+.navy-bg{background:var(--navy)!important}
+
+/* BOTTOM NAV */
+#bottom-nav{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:60px;
+  background:var(--white);
+  border-top:1px solid var(--g2);
+  display:flex;
+  z-index:100;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+#bottom-nav.hidden{display:none}
+.tab-btn{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  background:none;border:none;
+  cursor:pointer;
+  color:var(--g4);
+  font-family:inherit;
+  font-size:10px;font-weight:500;
+  letter-spacing:0.02em;
+  padding:8px 0;
+  transition:color 0.15s;
+}
+.tab-btn.active{color:var(--navy)}
+.tab-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+/* TOAST */
+#toast{
+  position:absolute;
+  bottom:76px;left:50%;
+  transform:translateX(-50%);
+  background:var(--navy);
+  color:var(--white);
+  padding:10px 20px;
+  border-radius:100px;
+  font-size:13px;font-weight:500;
+  white-space:nowrap;
+  opacity:0;
+  transition:opacity 0.25s;
+  pointer-events:none;
+  z-index:500;
+}
+#toast.show{opacity:1}
+
+/* MODAL OVERLAY */
+.modal-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:200;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.25s;
+}
+.modal-overlay.active{opacity:1;pointer-events:all}
+.bottom-sheet{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  background:var(--white);
+  border-radius:20px 20px 0 0;
+  padding:12px 24px 48px;
+  transform:translateY(100%);
+  transition:transform 0.35s ease;
+}
+.bottom-sheet.active{transform:translateY(0)}
+.drag-handle{
+  width:36px;height:4px;
+  background:var(--g3);border-radius:2px;
+  margin:0 auto 24px;
+}
+
+/* CARDS */
+.card{
+  background:var(--white);
+  border-radius:16px;
+  padding:20px;
+  border:1px solid var(--g2);
+}
+.card+.card,.card+.section-label,.section-label+.card{margin-top:12px}
+
+/* BUTTONS */
+.btn-primary{
+  display:block;width:100%;
+  padding:16px;
+  background:var(--navy);color:var(--white);
+  border:none;border-radius:12px;
+  font-family:inherit;font-size:16px;font-weight:600;
+  cursor:pointer;text-align:center;
+  transition:opacity 0.15s;
+}
+.btn-primary:active{opacity:0.85}
+.btn-ghost{
+  display:block;width:100%;
+  padding:14px;
+  background:transparent;color:var(--navy);
+  border:1.5px solid var(--g3);border-radius:12px;
+  font-family:inherit;font-size:15px;font-weight:500;
+  cursor:pointer;text-align:center;
+  transition:border-color 0.15s;
+}
+.btn-ghost:active{border-color:var(--navy)}
+.btn-sm{
+  padding:10px 20px;
+  background:var(--navy);color:var(--white);
+  border:none;border-radius:8px;
+  font-family:inherit;font-size:14px;font-weight:500;
+  cursor:pointer;
+}
+.btn-danger{
+  display:block;width:100%;
+  padding:14px;
+  background:transparent;color:var(--danger);
+  border:1.5px solid var(--danger);border-radius:12px;
+  font-family:inherit;font-size:15px;font-weight:500;
+  cursor:pointer;text-align:center;
+}
+
+/* AVATAR */
+.avatar{
+  width:48px;height:48px;
+  border-radius:50%;
+  background:var(--g2);color:var(--g5);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:16px;
+  flex-shrink:0;
+}
+.avatar.navy{background:var(--navy);color:var(--white)}
+.avatar.lg{width:72px;height:72px;font-size:24px}
+.avatar.sm{width:36px;height:36px;font-size:12px}
+
+/* PROGRESS BAR */
+.progress-bar{height:4px;background:rgba(255,255,255,0.2);border-radius:2px;overflow:hidden}
+.progress-bar.light{background:var(--g2)}
+.progress-fill{height:100%;background:var(--navy);border-radius:2px;transition:width 0.3s ease}
+.progress-bar.light .progress-fill{background:var(--navy)}
+.progress-bar .progress-fill{background:var(--white)}
+
+/* OPTION CARDS */
+.option-group{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.option-card{
+  border:1.5px solid var(--g2);border-radius:12px;
+  padding:16px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  cursor:pointer;background:var(--white);
+  transition:border-color 0.15s,background 0.15s;
+  text-align:center;font-size:13px;font-weight:500;color:var(--g5);
+  line-height:1.3;user-select:none;
+}
+.option-card.selected{border-color:var(--navy);background:rgba(27,46,75,0.05);color:var(--navy)}
+.option-card svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.5;flex-shrink:0}
+
+/* FORM ELEMENTS */
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--g5);margin-bottom:8px;letter-spacing:0.02em;text-transform:uppercase}
+.form-group input,.form-group textarea{
+  width:100%;padding:14px;
+  border:1.5px solid var(--g2);border-radius:12px;
+  font-family:inherit;font-size:15px;color:var(--navy);
+  background:var(--white);
+  outline:none;resize:vertical;
+  transition:border-color 0.15s;
+}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--navy)}
+.form-group input[type="time"]{-webkit-appearance:none}
+
+/* FREQ PILLS */
+.freq-pills{display:flex;gap:8px;flex-wrap:wrap}
+.freq-pill{
+  padding:8px 16px;
+  border:1.5px solid var(--g2);border-radius:100px;
+  font-family:inherit;font-size:13px;font-weight:500;color:var(--g5);
+  background:var(--white);cursor:pointer;
+  transition:border-color 0.15s,color 0.15s,background 0.15s;
+}
+.freq-pill.selected{border-color:var(--navy);color:var(--navy);background:rgba(27,46,75,0.05)}
+
+/* RANGE SLIDER */
+.slider-wrap{margin:8px 0 4px}
+input[type="range"]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:6px;border-radius:3px;
+  background:linear-gradient(to right,var(--navy) var(--fill,50%),var(--g2) var(--fill,50%));
+  outline:none;cursor:pointer;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--navy);cursor:pointer;
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);
+}
+.slider-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--g4);margin-top:6px}
+.slider-desc{
+  text-align:center;margin-top:12px;
+  font-size:14px;font-weight:500;color:var(--navy);
+  min-height:20px;
+}
+
+/* STATUS INDICATORS */
+.status-row{display:flex;align-items:center;gap:8px}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-dot.green{background:var(--success)}
+.status-dot.amber{background:var(--warning)}
+.checkin-status{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+.checkin-status.green{color:var(--success)}
+.checkin-status.amber{color:var(--warning)}
+.checkin-status.sm{font-size:12px}
+
+/* SECTION LABEL */
+.section-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--g4);margin:24px 0 10px}
+
+/* SCREEN PADDING */
+.screen-pad{padding:0 20px 80px}
+.screen-top{padding:20px 20px 0}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--g2);margin:24px 0}
+.divider-label{display:flex;align-items:center;gap:12px;margin:24px 0}
+.divider-label::before,.divider-label::after{content:'';flex:1;height:1px;background:var(--g2)}
+.divider-label span{font-size:12px;font-weight:600;color:var(--g4);white-space:nowrap}
+
+/* ROW LINKS */
+.row-link{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 0;
+  border-bottom:1px solid var(--g1);
+  cursor:pointer;
+  font-size:15px;color:var(--navy);font-weight:500;
+}
+.row-link:last-child{border-bottom:none}
+.row-link svg{width:16px;height:16px;stroke:var(--g4);flex-shrink:0}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--g2);border-radius:12px;overflow:hidden;margin-top:16px}
+.stat-cell{background:var(--white);padding:14px 8px;text-align:center}
+.stat-num{font-size:22px;font-weight:700;color:var(--navy)}
+.stat-lbl{font-size:11px;font-weight:500;color:var(--g4);margin-top:2px}
+
+/* BACK BUTTON */
+.back-btn{
+  display:flex;align-items:center;gap:6px;
+  background:none;border:none;
+  font-family:inherit;font-size:15px;font-weight:500;color:var(--navy);
+  cursor:pointer;padding:0;
+}
+.back-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--g1)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{font-size:15px;font-weight:500;color:var(--navy)}
+.toggle-sub{font-size:12px;color:var(--g4);margin-top:2px}
+input[type="checkbox"].toggle{
+  -webkit-appearance:none;appearance:none;
+  width:44px;height:26px;border-radius:13px;
+  background:var(--g3);cursor:pointer;
+  position:relative;flex-shrink:0;
+  transition:background 0.2s;
+}
+input[type="checkbox"].toggle:checked{background:var(--navy)}
+input[type="checkbox"].toggle::after{
+  content:'';
+  position:absolute;
+  top:3px;left:3px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--white);
+  transition:transform 0.2s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.2);
+}
+input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
+
+/* ==============================
+   SPLASH SCREEN
+   ============================== */
+#screen-splash{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 32px;text-align:center;
+  background:var(--navy)!important;
+}
+.splash-wordmark{
+  font-size:52px;font-weight:700;
+  color:var(--white);letter-spacing:-0.03em;
+  margin-bottom:16px;
+}
+.splash-tagline{
+  font-size:17px;font-weight:400;
+  color:rgba(255,255,255,0.65);
+  line-height:1.5;margin-bottom:56px;
+  max-width:280px;
+}
+.splash-cta{
+  width:100%;max-width:320px;
+  padding:18px;
+  background:var(--white);color:var(--navy);
+  border:none;border-radius:14px;
+  font-family:inherit;font-size:17px;font-weight:700;
+  cursor:pointer;margin-bottom:20px;
+}
+.splash-signin{
+  font-size:14px;color:rgba(255,255,255,0.5);
+  background:none;border:none;font-family:inherit;
+  cursor:pointer;text-decoration:underline;
+}
+
+/* ==============================
+   ONBOARDING SCREENS
+   ============================== */
+.ob-header{padding:20px 20px 0}
+.ob-progress-wrap{margin-bottom:28px}
+.ob-step{font-size:12px;font-weight:600;color:var(--g4);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px}
+.ob-nav{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.ob-q{font-size:22px;font-weight:700;color:var(--navy);line-height:1.25;margin-bottom:20px}
+.ob-q2{margin-top:32px}
+.ob-body{padding:0 20px}
+.ob-footer{
+  position:sticky;bottom:0;
+  background:var(--bg);
+  padding:16px 20px;
+  border-top:1px solid var(--g1);
+}
+
+/* ==============================
+   MATCHING SCREEN
+   ============================== */
+#screen-matching{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 32px;text-align:center;
+}
+.pulse-container{
+  position:relative;
+  width:100px;height:100px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:48px;
+}
+.pulse-ring{
+  position:absolute;
+  border:2px solid rgba(255,255,255,0.3);
+  border-radius:50%;
+  animation:pulse-ring 2s ease-out infinite;
+}
+.pulse-ring:nth-child(1){width:100%;height:100%}
+.pulse-ring:nth-child(2){width:100%;height:100%;animation-delay:0.6s}
+.pulse-ring:nth-child(3){width:100%;height:100%;animation-delay:1.2s}
+.pulse-core{
+  width:64px;height:64px;border-radius:50%;
+  background:rgba(255,255,255,0.1);
+  border:2px solid rgba(255,255,255,0.5);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:1;
+}
+.pulse-core svg{width:28px;height:28px;stroke:white;fill:none;stroke-width:1.5}
+.matching-title{font-size:24px;font-weight:700;color:var(--white);margin-bottom:32px}
+.match-steps{width:100%;max-width:280px;text-align:left}
+.match-step{
+  display:flex;align-items:center;gap:14px;
+  padding:10px 0;
+  opacity:0;transform:translateY(8px);
+  transition:opacity 0.4s ease,transform 0.4s ease;
+}
+.match-step.visible{opacity:1;transform:translateY(0)}
+.step-circle{
+  width:24px;height:24px;border-radius:50%;
+  border:2px solid rgba(255,255,255,0.3);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background 0.3s,border-color 0.3s;
+}
+.match-step.done .step-circle{background:var(--success);border-color:var(--success)}
+.step-circle svg{width:12px;height:12px;stroke:white;fill:none;stroke-width:2.5;opacity:0;transition:opacity 0.2s}
+.match-step.done .step-circle svg{opacity:1}
+.match-step span{font-size:14px;font-weight:500;color:rgba(255,255,255,0.8)}
+
+@keyframes pulse-ring{
+  0%{transform:scale(1);opacity:0.6}
+  100%{transform:scale(2.4);opacity:0}
+}
+
+/* ==============================
+   MATCHED SCREEN
+   ============================== */
+#screen-matched{
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:60px 24px 40px;text-align:center;
+}
+.checkmark-wrap{
+  width:80px;height:80px;border-radius:50%;
+  background:var(--success);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:28px;
+  animation:pop-in 0.5s ease-out forwards;
+}
+.checkmark-wrap svg{width:40px;height:40px;stroke:white;fill:none;stroke-width:2.5}
+.matched-title{font-size:30px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.matched-sub{font-size:14px;color:var(--g4);margin-bottom:32px}
+.partner-preview-card{
+  width:100%;background:var(--g1);
+  border-radius:16px;padding:20px;text-align:left;
+  margin-bottom:32px;
+}
+.partner-preview-row{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.partner-preview-name{font-size:18px;font-weight:700;color:var(--navy)}
+.partner-preview-sub{font-size:13px;color:var(--g5)}
+.partner-tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{
+  display:inline-block;padding:5px 12px;
+  background:var(--g2);border-radius:100px;
+  font-size:12px;font-weight:500;color:var(--g5);
+}
+.trial-note{font-size:12px;color:var(--g4);margin-top:16px;line-height:1.5}
+
+@keyframes pop-in{
+  0%{transform:scale(0);opacity:0}
+  60%{transform:scale(1.15)}
+  100%{transform:scale(1);opacity:1}
+}
+
+/* ==============================
+   CONTRACT SCREEN
+   ============================== */
+#screen-contract{
+  display:flex;flex-direction:column;
+  overflow:hidden!important;
+}
+.contract-header{
+  background:var(--navy);color:var(--white);
+  padding:48px 24px 24px;flex-shrink:0;
+}
+.contract-header h2{font-size:26px;font-weight:700;margin-bottom:6px}
+.contract-header p{font-size:14px;color:rgba(255,255,255,0.6)}
+.contract-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.contract-body{padding:24px}
+.contract-sign{
+  flex-shrink:0;padding:16px 20px;
+  background:var(--bg);border-top:1px solid var(--g2);
+}
+.contract-partner-section{
+  background:var(--g1);border-radius:12px;padding:20px;margin-top:8px;
+}
+.contract-partner-section h4{font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px}
+.contract-partner-row{margin-bottom:14px}
+.contract-partner-row:last-child{margin-bottom:0}
+.contract-partner-row p:first-child{font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}
+.contract-partner-row p:last-child{font-size:14px;color:var(--navy);font-weight:400;line-height:1.4}
+
+/* ==============================
+   HOME SCREEN
+   ============================== */
+.home-header{
+  position:sticky;top:0;z-index:10;
+  background:var(--bg);
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--g1);
+}
+.home-header-row{display:flex;align-items:flex-start;justify-content:space-between}
+.home-greeting{font-size:26px;font-weight:700;color:var(--navy)}
+.streak-badge{
+  display:inline-block;
+  padding:6px 12px;
+  background:var(--navy);color:var(--white);
+  border-radius:100px;font-size:12px;font-weight:600;
+  margin-top:6px;
+}
+.checkin-card-label{font-size:12px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+.checkin-card-time{font-size:13px;color:var(--g4);margin-bottom:16px}
+.partner-note{
+  font-size:14px;color:var(--g5);
+  font-style:italic;line-height:1.5;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--g1);
+}
+.partner-mini-header{display:flex;align-items:center;gap:12px;margin-bottom:0}
+.partner-mini-name{font-size:15px;font-weight:600;color:var(--navy)}
+.skip-count{font-size:13px;color:var(--g4);margin-bottom:10px}
+.skip-locked{font-size:13px;color:var(--warning);font-weight:500;line-height:1.4}
+.late-expand-btn{
+  background:none;border:none;font-family:inherit;
+  font-size:13px;color:var(--g4);cursor:pointer;
+  text-decoration:underline;padding:8px 0 0;display:block;
+}
+.late-note-wrap{margin-top:12px}
+.late-note-wrap.hidden{display:none}
+.late-note-wrap textarea{
+  width:100%;padding:12px;font-family:inherit;font-size:14px;
+  border:1.5px solid var(--g2);border-radius:10px;resize:none;
+  outline:none;margin-bottom:8px;
+}
+.notif-banner{
+  background:rgba(27,46,75,0.06);
+  border:1.5px dashed var(--g3);
+  border-radius:12px;padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.notif-banner.hidden{display:none}
+.notif-banner-text{font-size:13px;color:var(--g5);line-height:1.4;font-weight:500}
+.notif-banner-btn{
+  flex-shrink:0;padding:8px 14px;
+  background:var(--navy);color:var(--white);
+  border:none;border-radius:8px;
+  font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;
+}
+.checkin-sub{font-size:13px;color:var(--g4);margin-top:8px}
+
+/* ==============================
+   CHECK-IN SCREEN
+   ============================== */
+.ci-header{
+  padding:20px;
+  border-bottom:1px solid var(--g1);
+  display:flex;align-items:center;gap:16px;
+}
+.ci-mode-tabs{
+  display:flex;border:1.5px solid var(--g2);border-radius:10px;overflow:hidden;
+  margin:20px 20px 0;
+}
+.ci-tab{
+  flex:1;padding:10px;text-align:center;
+  background:none;border:none;font-family:inherit;
+  font-size:14px;font-weight:500;color:var(--g4);cursor:pointer;
+  transition:background 0.15s,color 0.15s;
+}
+.ci-tab.active{background:var(--navy);color:var(--white)}
+.ci-partner-note{
+  margin:16px 20px 0;
+  background:var(--g1);border-radius:12px;padding:14px;
+  font-size:13px;color:var(--g5);font-style:italic;line-height:1.5;
+}
+.ci-body{padding:24px 20px}
+.ci-voice-pane,.ci-text-pane{display:block}
+.ci-voice-pane.hidden,.ci-text-pane.hidden{display:none}
+
+/* Voice recording UI */
+.ci-timer{
+  font-size:42px;font-weight:700;color:var(--navy);
+  text-align:center;letter-spacing:-0.02em;margin-bottom:20px;
+}
+.waveform{
+  display:flex;gap:5px;align-items:center;justify-content:center;
+  height:48px;margin-bottom:28px;
+}
+.wave-bar{
+  width:5px;height:6px;
+  background:var(--g3);border-radius:3px;
+  transition:height 0.2s;
+}
+.waveform.active .wave-bar{animation:wave-anim 0.7s ease-in-out infinite alternate}
+.waveform.active .wave-bar:nth-child(1){animation-delay:0s}
+.waveform.active .wave-bar:nth-child(2){animation-delay:0.12s}
+.waveform.active .wave-bar:nth-child(3){animation-delay:0.06s}
+.waveform.active .wave-bar:nth-child(4){animation-delay:0.18s}
+.waveform.active .wave-bar:nth-child(5){animation-delay:0.03s}
+.waveform.active .wave-bar:nth-child(6){animation-delay:0.15s}
+.waveform.active .wave-bar:nth-child(7){animation-delay:0.09s}
+
+@keyframes wave-anim{
+  from{height:6px;background:var(--g3)}
+  to{height:34px;background:var(--navy)}
+}
+
+.record-btn{
+  width:80px;height:80px;border-radius:50%;
+  background:var(--navy);border:none;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;cursor:pointer;
+  transition:background 0.2s,transform 0.15s;
+  box-shadow:0 4px 16px rgba(27,46,75,0.3);
+}
+.record-btn svg{width:32px;height:32px;stroke:white;fill:none;stroke-width:1.8}
+.record-btn.recording{background:var(--danger);transform:scale(1.05)}
+.record-hint{text-align:center;font-size:13px;color:var(--g4);margin-bottom:0}
+.ci-playback{padding:0}
+.ci-playback.hidden{display:none}
+.ci-record-area.hidden{display:none}
+.playback-card{
+  background:var(--g1);border-radius:12px;padding:16px;
+  display:flex;align-items:center;gap:14px;margin-bottom:20px;
+}
+.play-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--navy);border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;
+}
+.play-btn svg{width:20px;height:20px;stroke:white;fill:none;stroke-width:2}
+.playback-info{flex:1}
+.playback-title{font-size:14px;font-weight:600;color:var(--navy)}
+.playback-dur{font-size:12px;color:var(--g4);margin-top:2px}
+.playback-actions{display:flex;gap:10px;margin-bottom:20px}
+.playback-actions .btn-ghost{flex:1}
+.playback-actions .btn-primary{flex:2}
+
+/* Text mode */
+.ci-text-pane textarea{
+  width:100%;padding:14px;
+  border:1.5px solid var(--g2);border-radius:12px;
+  font-family:inherit;font-size:15px;line-height:1.5;
+  resize:none;outline:none;min-height:160px;
+  margin-bottom:8px;
+}
+.ci-text-pane textarea:focus{border-color:var(--navy)}
+.ci-char-hint{font-size:12px;color:var(--g4);margin-bottom:16px}
+
+/* ==============================
+   PARTNER SCREEN
+   ============================== */
+.partner-hero{
+  background:var(--navy);padding:40px 24px 28px;
+  display:flex;align-items:center;gap:16px;
+}
+.partner-hero-info h2{font-size:22px;font-weight:700;color:var(--white)}
+.partner-hero-info p{font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px}
+.matched-date{font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px}
+
+/* ==============================
+   PROFILE SCREEN
+   ============================== */
+.profile-hero{
+  background:var(--navy);padding:48px 24px 28px;
+  text-align:center;
+}
+.profile-hero h2{font-size:22px;font-weight:700;color:var(--white);margin-top:12px}
+.profile-hero p{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px}
+
+/* ==============================
+   SETTINGS SCREEN
+   ============================== */
+.settings-section-title{
+  font-size:11px;font-weight:700;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--g4);
+  padding:24px 20px 8px;
+}
+.settings-card{margin:0 20px;background:var(--white);border-radius:16px;border:1px solid var(--g2);padding:0 16px}
+
+/* ==============================
+   CONTRACT VIEW SCREEN
+   ============================== */
+.cv-header{
+  background:var(--navy);padding:48px 24px 24px;
+  display:flex;align-items:center;gap:16px;
+}
+.cv-header h2{font-size:20px;font-weight:700;color:var(--white)}
+.cv-back{
+  background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;
+}
+.cv-back svg{width:22px;height:22px;stroke:white;fill:none;stroke-width:2}
+.cv-section{padding:20px;border-bottom:1px solid var(--g1)}
+.cv-section-title{font-size:11px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px}
+.cv-row{margin-bottom:14px}
+.cv-row:last-child{margin-bottom:0}
+.cv-row-label{font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px}
+.cv-row-val{font-size:15px;color:var(--navy);line-height:1.4}
+.cv-partner-section{background:var(--g1);margin:0;padding:20px}
+</style>
 </head>
 <body>
-  <p>Tether</p>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
+<div id="app">
+
+<!-- SPLASH -->
+<div id="screen-splash" class="screen navy-bg">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:40px 32px;text-align:center">
+    <p class="splash-wordmark">tether</p>
+    <p class="splash-tagline">Show up for someone. They'll show up for you.</p>
+    <button class="splash-cta" onclick="showScreen('screen-ob-a','forward');updateProgress(0)">Get Started</button>
+    <button class="splash-signin" onclick="showToast('Sign in coming soon.')">Already have an account? Sign in</button>
+  </div>
+</div>
+
+<!-- ONBOARDING A -->
+<div id="screen-ob-a" class="screen">
+  <div class="ob-header">
+    <div class="ob-progress-wrap">
+      <div class="ob-step">Step 1 of 3</div>
+      <div class="progress-bar light"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="ob-body">
+    <p class="ob-q">What are you currently working on?</p>
+    <div class="option-group" id="q1-group">
+      <div class="option-card" onclick="selectOption('q1','business',this)">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+        Starting a business or side hustle
+      </div>
+      <div class="option-card" onclick="selectOption('q1','growth',this)">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Personal growth and fitness
+      </div>
+      <div class="option-card" onclick="selectOption('q1','school',this)">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        School or a new skill
+      </div>
+      <div class="option-card" onclick="selectOption('q1','stuck',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Getting unstuck
+      </div>
+    </div>
+
+    <p class="ob-q ob-q2">What's your biggest struggle right now?</p>
+    <div class="option-group" id="q2-group">
+      <div class="option-card" onclick="selectOption('q2','consistent',this)">
+        <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Staying consistent
+      </div>
+      <div class="option-card" onclick="selectOption('q2','fear',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Fear and self-doubt
+      </div>
+      <div class="option-card" onclick="selectOption('q2','structure',this)">
+        <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        No structure
+      </div>
+      <div class="option-card" onclick="selectOption('q2','motivation',this)">
+        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Motivation dips
+      </div>
+    </div>
+  </div>
+  <div class="ob-footer">
+    <button class="btn-primary" onclick="continueObA()">Continue</button>
+  </div>
+</div>
+
+<!-- ONBOARDING B -->
+<div id="screen-ob-b" class="screen">
+  <div class="ob-header">
+    <div class="ob-progress-wrap">
+      <div class="ob-step">Step 2 of 3</div>
+      <div class="progress-bar light"><div class="progress-fill" style="width:33%"></div></div>
+    </div>
+    <div class="ob-nav">
+      <button class="back-btn" onclick="showScreen('screen-ob-a','back')">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+    </div>
+  </div>
+  <div class="ob-body">
+    <p class="ob-q">When are you most active?</p>
+    <div class="option-group" id="q3-group">
+      <div class="option-card" onclick="selectOption('q3','morning',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        Morning
+      </div>
+      <div class="option-card" onclick="selectOption('q3','afternoon',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        Afternoon
+      </div>
+      <div class="option-card" onclick="selectOption('q3','evening',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        Evening
+      </div>
+      <div class="option-card" onclick="selectOption('q3','late',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><circle cx="17" cy="5" r="1" fill="currentColor"/><circle cx="20" cy="9" r="0.7" fill="currentColor"/></svg>
+        Late night
+      </div>
+    </div>
+
+    <p class="ob-q ob-q2">How direct do you want your partner to be?</p>
+    <div class="slider-wrap">
+      <input type="range" id="directness-slider" min="1" max="5" value="3" style="--fill:50%"/>
+      <div class="slider-labels"><span>Gentle</span><span>Blunt</span></div>
+    </div>
+    <div class="slider-desc" id="directness-desc">Balanced</div>
+  </div>
+  <div class="ob-footer">
+    <button class="btn-primary" onclick="continueObB()">Continue</button>
+  </div>
+</div>
+
+<!-- ONBOARDING C -->
+<div id="screen-ob-c" class="screen">
+  <div class="ob-header">
+    <div class="ob-progress-wrap">
+      <div class="ob-step">Step 3 of 3</div>
+      <div class="progress-bar light"><div class="progress-fill" style="width:66%"></div></div>
+    </div>
+    <div class="ob-nav">
+      <button class="back-btn" onclick="showScreen('screen-ob-b','back')">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+    </div>
+  </div>
+  <div class="ob-body">
+    <p class="ob-q">How do you prefer to check in?</p>
+    <div class="option-group" id="q5-group">
+      <div class="option-card" onclick="selectOption('q5','voice',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Voice notes
+      </div>
+      <div class="option-card" onclick="selectOption('q5','text',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Text messages
+      </div>
+      <div class="option-card" onclick="selectOption('q5','either',this)" style="grid-column:span 2">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Either works
+      </div>
+    </div>
+
+    <p class="ob-q ob-q2">What language do you primarily speak?</p>
+    <div class="option-group" id="q6-group">
+      <div class="option-card" onclick="selectOption('q6','en',this)">English</div>
+      <div class="option-card" onclick="selectOption('q6','es',this)">Spanish</div>
+      <div class="option-card" onclick="selectOption('q6','fr',this)">French</div>
+      <div class="option-card" onclick="selectOption('q6','zh',this)">Mandarin</div>
+      <div class="option-card" onclick="selectOption('q6','pt',this)">Portuguese</div>
+      <div class="option-card" onclick="selectOption('q6','other',this)">Other</div>
+    </div>
+  </div>
+  <div class="ob-footer" style="padding-bottom:32px">
+    <button class="btn-primary" onclick="continueObC()">Find My Match</button>
+  </div>
+</div>
+
+<!-- MATCHING -->
+<div id="screen-matching" class="screen navy-bg">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:40px 32px;text-align:center">
+    <div class="pulse-container">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring"></div>
+      <div class="pulse-core">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+    </div>
+    <h2 class="matching-title">Finding your match...</h2>
+    <div class="match-steps">
+      <div class="match-step" id="mstep-1">
+        <div class="step-circle"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span>Analyzing your answers</span>
+      </div>
+      <div class="match-step" id="mstep-2">
+        <div class="step-circle"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span>Checking timezone compatibility</span>
+      </div>
+      <div class="match-step" id="mstep-3">
+        <div class="step-circle"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span>Aligning check-in preferences</span>
+      </div>
+      <div class="match-step" id="mstep-4">
+        <div class="step-circle"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span>Match found</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MATCHED -->
+<div id="screen-matched" class="screen">
+  <div style="display:flex;flex-direction:column;align-items:center;padding:60px 24px 40px;text-align:center;min-height:100dvh">
+    <div class="checkmark-wrap">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="matched-title">Meet Jordan.</h2>
+    <p class="matched-sub">Your accountability partner for the next 7 days.</p>
+    <div class="partner-preview-card">
+      <div class="partner-preview-row">
+        <div class="avatar navy lg">JM</div>
+        <div>
+          <p class="partner-preview-name">Jordan</p>
+          <p class="partner-preview-sub">Building something</p>
+        </div>
+      </div>
+      <div class="partner-tags">
+        <span class="tag">Voice check-ins</span>
+        <span class="tag">PST</span>
+        <span class="tag">English</span>
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;max-width:360px;margin-bottom:12px" onclick="showScreen('screen-contract','forward');populateContractScreen()">Set Up Your Contract</button>
+    <button class="btn-ghost" style="width:100%;max-width:360px" onclick="showScreen('screen-matching','back');runMatchingAnimation()">Request a different match</button>
+    <p class="trial-note">You have a 7-day trial period. After that, you can keep your partner or request a new match.</p>
+  </div>
+</div>
+
+<!-- CONTRACT SETUP -->
+<div id="screen-contract" class="screen contract-screen">
+  <div class="contract-header">
+    <h2>The Contract</h2>
+    <p>Define your commitment. Own it.</p>
+  </div>
+  <div class="contract-scroll">
+    <div class="contract-body">
+      <div class="form-group">
+        <label>Your first name</label>
+        <input type="text" id="c-name" placeholder="What should we call you?"/>
+      </div>
+      <div class="form-group">
+        <label>I am working on...</label>
+        <textarea id="c-working-on" rows="3" placeholder="e.g. launching my first product by end of the month"></textarea>
+      </div>
+      <div class="form-group">
+        <label>My biggest thing to overcome is...</label>
+        <textarea id="c-overcoming" rows="3" placeholder="Be honest with yourself"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Check-in frequency</label>
+        <div class="freq-pills">
+          <button class="freq-pill selected" data-freq="daily">Daily</button>
+          <button class="freq-pill" data-freq="5x">5x per week</button>
+          <button class="freq-pill" data-freq="every-other">Every other day</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Call me out when...</label>
+        <textarea id="c-callout" rows="2" placeholder="e.g. I go quiet or start making excuses"></textarea>
+      </div>
+      <div class="form-group">
+        <label>This matters to me because...</label>
+        <textarea id="c-because" rows="3" placeholder="What's driving you?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Daily check-in time</label>
+        <input type="time" id="c-time" value="09:00"/>
+      </div>
+
+      <div class="divider-label"><span>Jordan's commitment</span></div>
+      <div class="contract-partner-section">
+        <h4>Jordan's side</h4>
+        <div class="contract-partner-row">
+          <p>Working on</p>
+          <p id="cp-working-on">growing my freelance design business to full-time income</p>
+        </div>
+        <div class="contract-partner-row">
+          <p>Overcoming</p>
+          <p id="cp-overcoming">fear of putting my work out there and charging what I'm worth</p>
+        </div>
+        <div class="contract-partner-row">
+          <p>Call me out when</p>
+          <p id="cp-callout">I start second-guessing myself or disappear for more than a day</p>
+        </div>
+        <div class="contract-partner-row">
+          <p>Why it matters</p>
+          <p id="cp-why">I've played it safe my whole life and I'm done with that</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contract-sign">
+    <button class="btn-primary" onclick="signContract()">Sign the Contract</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="screen-home" class="screen">
+  <div class="home-header">
+    <div class="home-header-row">
+      <div>
+        <h1 class="home-greeting" id="home-greeting">Hey, there</h1>
+        <span class="streak-badge" id="home-streak">0 day streak</span>
+      </div>
+    </div>
+  </div>
+  <div class="screen-pad screen-top">
+    <div class="section-label">Your check-in</div>
+    <div class="card" id="checkin-card">
+      <p class="checkin-card-label">Today's check-in</p>
+      <button class="btn-primary" onclick="openCheckin()">Check in now</button>
+    </div>
+
+    <div class="section-label">Your partner</div>
+    <div class="card" id="partner-card">
+      <div class="partner-mini-header">
+        <div class="avatar sm navy">JM</div>
+        <div>
+          <p class="partner-mini-name">Jordan</p>
+          <div class="checkin-status green sm">
+            <div class="status-dot green"></div>
+            <span>Checked in today</span>
+          </div>
+        </div>
+      </div>
+      <p class="partner-note">"Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."</p>
+    </div>
+
+    <div class="section-label">Skips this week</div>
+    <div class="card" id="skip-section">
+      <p class="skip-count">0/2 skips used</p>
+      <button class="btn-ghost" onclick="showSkipModal()" style="margin-top:10px">Not today</button>
+    </div>
+
+    <div id="notif-banner" class="notif-banner" style="margin-top:16px">
+      <p class="notif-banner-text">Enable reminders so you never miss a check-in.</p>
+      <button class="notif-banner-btn" onclick="requestNotifications()">Enable</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECK-IN -->
+<div id="screen-checkin" class="screen">
+  <div class="ci-header">
+    <button class="back-btn" onclick="ciBack()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div style="display:flex;align-items:center;gap:10px;margin-left:auto">
+      <div class="avatar sm navy">JM</div>
+      <p style="font-size:14px;font-weight:600;color:var(--navy)">Jordan</p>
+    </div>
+  </div>
+  <div class="ci-partner-note">
+    "Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."
+  </div>
+  <div class="ci-mode-tabs">
+    <button class="ci-tab active" id="ci-tab-voice" onclick="switchCheckinMode('voice')">Voice</button>
+    <button class="ci-tab" id="ci-tab-text" onclick="switchCheckinMode('text')">Text</button>
+  </div>
+
+  <!-- Voice pane -->
+  <div class="ci-voice-pane ci-body" id="ci-voice-pane">
+    <div id="ci-record-area" style="text-align:center">
+      <p class="ci-timer" id="ci-timer">0:00</p>
+      <div class="waveform" id="ci-waveform">
+        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+      <button class="record-btn" id="ci-record-btn" onclick="toggleRecording()">
+        <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+      </button>
+      <p class="record-hint">Tap to record — 60 sec max</p>
+    </div>
+    <div class="ci-playback hidden" id="ci-playback">
+      <div class="playback-card">
+        <button class="play-btn" onclick="playVoicePreview()">
+          <svg viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <div class="playback-info">
+          <p class="playback-title">Your voice note</p>
+          <p class="playback-dur" id="ci-play-duration">0:00</p>
+        </div>
+      </div>
+      <div class="playback-actions">
+        <button class="btn-ghost" onclick="reRecord()">Re-record</button>
+        <button class="btn-primary" onclick="sendVoiceNote()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Text pane -->
+  <div class="ci-text-pane ci-body hidden" id="ci-text-pane">
+    <textarea id="ci-text-input" placeholder="What happened today? What did you push through?"></textarea>
+    <p class="ci-char-hint">There's no minimum — say what you need to say.</p>
+    <button class="btn-primary" onclick="sendTextNote()">Send check-in</button>
+  </div>
+</div>
+
+<!-- PARTNER TAB -->
+<div id="screen-partner" class="screen">
+  <div class="partner-hero">
+    <div class="avatar navy lg">JM</div>
+    <div class="partner-hero-info">
+      <h2>Jordan</h2>
+      <p>Building something</p>
+      <p class="matched-date" id="p-matched-date">Matched today</p>
+    </div>
+  </div>
+  <div class="screen-pad screen-top">
+    <div class="stats-row">
+      <div class="stat-cell"><div class="stat-num" id="p-streak">0</div><div class="stat-lbl">Day streak</div></div>
+      <div class="stat-cell"><div class="stat-num" id="p-skips">0</div><div class="stat-lbl">Skips this week</div></div>
+      <div class="stat-cell"><div class="stat-num" id="p-days">1</div><div class="stat-lbl">Days together</div></div>
+    </div>
+    <div class="section-label">Their commitment</div>
+    <div class="card">
+      <div class="cv-row" style="margin-bottom:14px">
+        <p class="cv-row-label">Working on</p>
+        <p class="cv-row-val" id="p-working-on">growing my freelance design business to full-time income</p>
+      </div>
+      <div class="cv-row" style="margin-bottom:14px">
+        <p class="cv-row-label">Overcoming</p>
+        <p class="cv-row-val" id="p-overcoming">fear of putting my work out there and charging what I'm worth</p>
+      </div>
+      <div class="cv-row">
+        <p class="cv-row-label">Call them out when</p>
+        <p class="cv-row-val" id="p-callout">they start second-guessing or disappear</p>
+      </div>
+    </div>
+    <div class="section-label">Today</div>
+    <div class="card">
+      <div class="checkin-status green" style="margin-bottom:10px">
+        <div class="status-dot green"></div>
+        <span>Checked in</span>
+      </div>
+      <p class="partner-note" style="border-top:none;padding-top:0;margin-top:0">"Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."</p>
+    </div>
+    <div class="section-label"></div>
+    <div class="card" style="padding:0 20px">
+      <div class="row-link" onclick="openContractView('screen-partner')">
+        View Full Contract
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="row-link" onclick="showRematchModal()">
+        Request Rematch
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE TAB -->
+<div id="screen-profile" class="screen">
+  <div class="profile-hero">
+    <div class="avatar navy lg" id="prof-initials" style="margin:0 auto">YO</div>
+    <h2 id="prof-name">You</h2>
+    <p id="prof-since">Member since today</p>
+  </div>
+  <div class="screen-pad screen-top">
+    <div class="stats-row">
+      <div class="stat-cell"><div class="stat-num" id="prof-streak">0</div><div class="stat-lbl">Day streak</div></div>
+      <div class="stat-cell"><div class="stat-num" id="prof-skips">0</div><div class="stat-lbl">Skips this week</div></div>
+      <div class="stat-cell"><div class="stat-num" id="prof-days">1</div><div class="stat-lbl">Days active</div></div>
+    </div>
+    <div class="section-label">Your contract</div>
+    <div class="card" style="padding:0 20px">
+      <div class="row-link" onclick="openContractView('screen-profile')">
+        View Full Contract
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+    <div class="section-label">Account</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:14px;color:var(--g5)">Check-in format</span>
+        <span style="font-size:14px;font-weight:600;color:var(--navy)" id="prof-format">Voice</span>
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="font-size:14px;color:var(--g5)">Daily reminder</span>
+        <span style="font-size:14px;font-weight:600;color:var(--navy)" id="prof-time">9:00 am</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS TAB -->
+<div id="screen-settings" class="screen">
+  <div style="padding:48px 20px 20px">
+    <h2 style="font-size:24px;font-weight:700;color:var(--navy)">Settings</h2>
+  </div>
+  <p class="settings-section-title">Notifications</p>
+  <div class="settings-card">
+    <div class="toggle-row">
+      <div>
+        <p class="toggle-label">Check-in reminders</p>
+        <p class="toggle-sub">Get reminded before your check-in time</p>
+      </div>
+      <input type="checkbox" class="toggle" id="notif-toggle" onchange="toggleNotifications(this.checked)"/>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <p class="toggle-label">Partner check-in alerts</p>
+        <p class="toggle-sub">Know when Jordan checks in</p>
+      </div>
+      <input type="checkbox" class="toggle" id="partner-notif-toggle"/>
+    </div>
+  </div>
+  <p class="settings-section-title">Check-in preferences</p>
+  <div class="settings-card">
+    <div class="row-link">
+      <span>Format</span>
+      <span style="color:var(--g4);font-size:14px" id="settings-format">Voice</span>
+    </div>
+    <div class="row-link">
+      <span>Reminder time</span>
+      <span style="color:var(--g4);font-size:14px" id="settings-time">9:00 am</span>
+    </div>
+  </div>
+  <p class="settings-section-title">Match</p>
+  <div class="settings-card">
+    <div class="row-link" onclick="showRematchModal()">
+      Request Rematch
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
+  <p class="settings-section-title">About</p>
+  <div class="settings-card">
+    <div class="row-link">
+      <span>Version</span>
+      <span style="color:var(--g4);font-size:14px">1.0.0</span>
+    </div>
+    <div class="row-link" onclick="resetApp()" style="color:var(--danger)">
+      Reset App Data
+      <svg viewBox="0 0 24 24" style="stroke:var(--danger)"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
+  <div style="height:32px"></div>
+</div>
+
+<!-- CONTRACT VIEW -->
+<div id="screen-contract-view" class="screen">
+  <div class="cv-header">
+    <button class="cv-back" onclick="popScreen()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <h2>The Contract</h2>
+  </div>
+  <div class="cv-section">
+    <p class="cv-section-title">Your side</p>
+    <div class="cv-row"><p class="cv-row-label">Working on</p><p class="cv-row-val" id="cv-u-working">—</p></div>
+    <div class="cv-row"><p class="cv-row-label">Overcoming</p><p class="cv-row-val" id="cv-u-overcoming">—</p></div>
+    <div class="cv-row"><p class="cv-row-label">Call me out when</p><p class="cv-row-val" id="cv-u-callout">—</p></div>
+    <div class="cv-row"><p class="cv-row-label">Why it matters</p><p class="cv-row-val" id="cv-u-because">—</p></div>
+    <div class="cv-row"><p class="cv-row-label">Frequency</p><p class="cv-row-val" id="cv-u-freq">—</p></div>
+    <div class="cv-row"><p class="cv-row-label">Check-in time</p><p class="cv-row-val" id="cv-u-time">—</p></div>
+  </div>
+  <div class="cv-partner-section">
+    <p class="cv-section-title">Jordan's side</p>
+    <div class="cv-row"><p class="cv-row-label">Working on</p><p class="cv-row-val" id="cv-p-working">—</p></div>
+    <div class="cv-row"><p class="cv-row-label">Overcoming</p><p class="cv-row-val" id="cv-p-overcoming">—</p></div>
+    <div class="cv-row"><p class="cv-row-label">Call me out when</p><p class="cv-row-val" id="cv-p-callout">—</p></div>
+    <div class="cv-row"><p class="cv-row-label">Why it matters</p><p class="cv-row-val" id="cv-p-because">—</p></div>
+  </div>
+  <div style="height:40px"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav id="bottom-nav" class="hidden">
+  <button class="tab-btn active" data-screen="screen-home">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </button>
+  <button class="tab-btn" data-screen="screen-partner">
+    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Partner
+  </button>
+  <button class="tab-btn" data-screen="screen-profile">
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Profile
+  </button>
+  <button class="tab-btn" data-screen="screen-settings">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Settings
+  </button>
+</nav>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- MODALS -->
+<div id="modal-overlay" class="modal-overlay">
+  <div id="modal-skip" class="bottom-sheet">
+    <div class="drag-handle"></div>
+    <h3 style="font-size:18px;font-weight:700;color:var(--navy);margin-bottom:10px">Skip today?</h3>
+    <p style="font-size:14px;color:var(--g5);line-height:1.5;margin-bottom:28px">Jordan will see this. No explanation needed — but make sure to give them extra motivation tomorrow.</p>
+    <button class="btn-primary" style="margin-bottom:12px" onclick="confirmSkip()">Yes, skip today</button>
+    <button class="btn-ghost" onclick="closeSkipModal()">Never mind</button>
+  </div>
+  <div id="modal-rematch" class="bottom-sheet">
+    <div class="drag-handle"></div>
+    <h3 style="font-size:18px;font-weight:700;color:var(--navy);margin-bottom:10px">Request a rematch?</h3>
+    <p style="font-size:14px;color:var(--g5);line-height:1.5;margin-bottom:28px">Jordan won't be notified why. We'll find you a new partner within 24 hours.</p>
+    <button class="btn-primary" style="margin-bottom:12px" onclick="confirmRematch()">Request rematch</button>
+    <button class="btn-ghost" onclick="closeRematchModal()">Stay with Jordan</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'tether_state';
+const DEFAULT_STATE = {
+  user: { name: '', initials: 'YO', format: 'voice', checkinTime: '09:00' },
+  partner: { name: 'Jordan', initials: 'JM', format: 'voice', timezone: 'PST', language: 'English' },
+  contract: null,
+  onboardingAnswers: { q1: null, q2: null, q3: null, q4: 3, q5: null, q6: null },
+  checkedInToday: false,
+  checkedInLate: false,
+  lateNote: '',
+  skipsThisWeek: 0,
+  streak: 0,
+  matchedDate: null,
+  notificationsEnabled: false,
+  weekStartDate: null,
+  lastCheckInDate: null
+};
+
+let state = {};
+let navHistory = [];
+let activeTab = 'screen-home';
+let obAnswers = { q1: null, q2: null, q3: null, q4: 3, q5: null, q6: null };
+let mediaRecorder = null, audioChunks = [], recordingInterval = null, recordingTimeout = null;
+let recordingStartTime = 0, pendingVoiceBase64 = null, pendingVoiceBlob = null, pendingVoiceDuration = 0;
+
+// --- STATE ---
+function loadState() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    state = s ? Object.assign({}, DEFAULT_STATE, JSON.parse(s)) : Object.assign({}, DEFAULT_STATE);
+    if (!state.user) state.user = Object.assign({}, DEFAULT_STATE.user);
+    if (!state.partner) state.partner = Object.assign({}, DEFAULT_STATE.partner);
+  } catch(e) { state = Object.assign({}, DEFAULT_STATE); }
+}
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+// --- NAVIGATION ---
+function showScreen(id, dir) {
+  dir = dir || 'tab';
+  const current = document.querySelector('.screen.active');
+  const next = document.getElementById(id);
+  if (!next || next === current) return;
+
+  const TAB_SCREENS = ['screen-home','screen-partner','screen-profile','screen-settings'];
+  const nav = document.getElementById('bottom-nav');
+  if (TAB_SCREENS.indexOf(id) > -1) {
+    nav.classList.remove('hidden');
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.screen === id);
+    });
+  } else {
+    nav.classList.add('hidden');
+  }
+
+  if (dir === 'tab') {
+    if (current) { current.classList.remove('active'); }
+    next.classList.add('active');
+    next.scrollTop = 0;
+    return;
+  }
+
+  var enterFrom = dir === 'forward' ? '100%' : '-100%';
+  var exitTo   = dir === 'forward' ? '-100%' : '100%';
+
+  next.style.cssText = 'transform:translateX('+enterFrom+');opacity:1;pointer-events:all;z-index:10;';
+  void next.offsetWidth;
+  next.style.transition = 'transform 0.35s ease';
+  next.style.transform = 'translateX(0)';
+
+  if (current) {
+    current.style.transition = 'transform 0.35s ease';
+    current.style.transform = 'translateX('+exitTo+')';
+  }
+
+  setTimeout(function() {
+    if (current) { current.classList.remove('active'); current.style.cssText = ''; }
+    next.classList.add('active');
+    next.style.cssText = '';
+    next.scrollTop = 0;
+  }, 350);
+}
+
+function pushScreen(id) {
+  var cur = document.querySelector('.screen.active');
+  if (cur) navHistory.push(cur.id);
+  showScreen(id, 'forward');
+}
+
+function popScreen() {
+  var prev = navHistory.pop();
+  if (prev) showScreen(prev, 'back');
+}
+
+function switchTab(id) {
+  activeTab = id;
+  showScreen(id, 'tab');
+}
+
+// --- ONBOARDING ---
+function selectOption(q, val, el) {
+  obAnswers[q] = val;
+  var group = el.closest('.option-group');
+  group.querySelectorAll('.option-card').forEach(function(c) { c.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function updateDirectness(val) {
+  obAnswers.q4 = parseInt(val);
+  var descs = ['','Soft encouragement','Mostly gentle','Balanced','Honest feedback','No filter, full truth'];
+  document.getElementById('directness-desc').textContent = descs[val];
+  var pct = ((val - 1) / 4) * 100;
+  document.getElementById('directness-slider').style.setProperty('--fill', pct + '%');
+}
+
+function continueObA() {
+  if (!obAnswers.q1 || !obAnswers.q2) { showToast('Please answer both questions.'); return; }
+  showScreen('screen-ob-b', 'forward');
+}
+
+function continueObB() {
+  if (!obAnswers.q3) { showToast('Please select when you are most active.'); return; }
+  showScreen('screen-ob-c', 'forward');
+}
+
+function continueObC() {
+  if (!obAnswers.q5 || !obAnswers.q6) { showToast('Please answer both questions.'); return; }
+  state.onboardingAnswers = Object.assign({}, obAnswers);
+  var fmap = { voice: 'voice', text: 'text', either: 'voice' };
+  state.user.format = fmap[obAnswers.q5] || 'voice';
+  saveState();
+  showScreen('screen-matching', 'forward');
+  runMatchingAnimation();
+}
+
+// --- MATCHING ---
+function runMatchingAnimation() {
+  var steps = document.querySelectorAll('.match-step');
+  steps.forEach(function(s) { s.classList.remove('done','visible'); });
+  var delays = [500, 1500, 2500, 3500];
+  steps.forEach(function(step, i) {
+    setTimeout(function() {
+      step.classList.add('visible');
+      setTimeout(function() { step.classList.add('done'); }, 350);
+    }, delays[i]);
+  });
+  setTimeout(function() { showScreen('screen-matched', 'forward'); }, 4600);
+}
+
+// --- PARTNER CONTRACT ---
+function buildPartnerContract() {
+  var q1 = obAnswers.q1 || (state.onboardingAnswers && state.onboardingAnswers.q1);
+  var q4 = obAnswers.q4 || (state.onboardingAnswers && state.onboardingAnswers.q4) || 3;
+  var workingOn = 'growing my freelance design business to full-time income';
+  var overcoming = "fear of putting my work out there and charging what I'm worth";
+  var callout = q4 >= 4
+    ? 'I go quiet for more than a day — call it out hard'
+    : "I start second-guessing myself or disappear for more than a day";
+  var why = "I've played it safe my whole life and I'm done with that";
+  if (q1 === 'school') {
+    workingOn = 'growing my freelance business while juggling school';
+    overcoming = 'fear of putting my work out there while managing coursework';
+  } else if (q1 === 'growth') {
+    workingOn = 'building consistent habits around fitness and personal growth';
+    overcoming = 'staying disciplined when motivation dips';
+  } else if (q1 === 'stuck') {
+    workingOn = 'figuring out my next move and building real momentum';
+    overcoming = 'the paralysis that comes with not knowing which path to take';
+  }
+  return { workingOn: workingOn, overcoming: overcoming, callout: callout, why: why };
+}
+
+function populateContractScreen() {
+  var pc = buildPartnerContract();
+  document.getElementById('cp-working-on').textContent = pc.workingOn;
+  document.getElementById('cp-overcoming').textContent = pc.overcoming;
+  document.getElementById('cp-callout').textContent = pc.callout;
+  document.getElementById('cp-why').textContent = pc.why;
+}
+
+function signContract() {
+  var name = document.getElementById('c-name').value.trim();
+  var workingOn = document.getElementById('c-working-on').value.trim();
+  var overcoming = document.getElementById('c-overcoming').value.trim();
+  var callout = document.getElementById('c-callout').value.trim();
+  var because = document.getElementById('c-because').value.trim();
+  var checkinTime = document.getElementById('c-time').value || '09:00';
+  var freq = (document.querySelector('.freq-pill.selected') || {}).dataset && document.querySelector('.freq-pill.selected').dataset.freq || 'daily';
+
+  if (!workingOn || !overcoming) { showToast('Please fill in the required fields.'); return; }
+
+  name = name || 'You';
+  state.user.name = name;
+  state.user.initials = name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0,2) || 'YO';
+  state.user.checkinTime = checkinTime;
+
+  var pc = buildPartnerContract();
+  state.contract = {
+    user: { workingOn: workingOn, overcoming: overcoming, callout: callout, because: because, frequency: freq, checkinTime: checkinTime },
+    partner: pc,
+    signedAt: new Date().toISOString()
+  };
+  state.matchedDate = new Date().toISOString();
+  state.weekStartDate = getMondayISO();
+  saveState();
+
+  navHistory = [];
+  showScreen('screen-home', 'forward');
+  renderHome();
+  document.getElementById('bottom-nav').classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.screen === 'screen-home');
+  });
+  setTimeout(function() { renderNotifBanner(); }, 800);
+}
+
+// --- HOME ---
+function renderHome() {
+  checkDayRollover();
+  var name = state.user && state.user.name ? state.user.name : 'there';
+  var first = name.split(' ')[0];
+  document.getElementById('home-greeting').textContent = 'Hey, ' + first;
+  var s = state.streak || 0;
+  document.getElementById('home-streak').textContent = s + ' day streak';
+  renderCheckinCard();
+  renderSkipSection();
+  renderNotifBanner();
+}
+
+function checkDayRollover() {
+  var today = getTodayISO();
+  if (state.lastCheckInDate && state.lastCheckInDate !== today) {
+    var last = new Date(state.lastCheckInDate);
+    var now = new Date(today);
+    var diff = (now - last) / 86400000;
+    if (diff > 1.5) { state.streak = 0; }
+    state.checkedInToday = false;
+    state.checkedInLate = false;
+    state.lateNote = '';
+  }
+  var monday = getMondayISO();
+  if (state.weekStartDate !== monday) {
+    state.weekStartDate = monday;
+    state.skipsThisWeek = 0;
+  }
+  saveState();
+}
+
+function isLateCheckin() {
+  if (!state.user || !state.user.checkinTime) return false;
+  var parts = state.user.checkinTime.split(':');
+  var h = parseInt(parts[0]); var m = parseInt(parts[1]);
+  var now = new Date();
+  var sched = new Date();
+  sched.setHours(h, m, 0, 0);
+  return (now - sched) > 3600000;
+}
+
+function renderCheckinCard() {
+  var card = document.getElementById('checkin-card');
+  if (state.checkedInToday) {
+    if (state.checkedInLate) {
+      card.innerHTML = '<div class="checkin-status amber"><div class="status-dot amber"></div><span>Checked in late</span></div>'
+        + '<button class="late-expand-btn" onclick="toggleLateNote()">Add a note on why</button>'
+        + '<div id="late-note-wrap" class="late-note-wrap hidden">'
+        + '<textarea id="late-note-input" rows="3" placeholder="Optional — Jordan will see this">' + (state.lateNote||'') + '</textarea>'
+        + '<button class="btn-sm" onclick="saveLateNote()">Save note</button>'
+        + '</div>';
+    } else {
+      card.innerHTML = '<div class="checkin-status green"><div class="status-dot green"></div><span>Checked in today</span></div>'
+        + '<p class="checkin-sub">You showed up. Keep the streak going.</p>';
     }
-  </script>
+  } else {
+    var time = formatTime(state.user && state.user.checkinTime ? state.user.checkinTime : '09:00');
+    card.innerHTML = '<p class="checkin-card-label">Today\'s check-in</p>'
+      + '<p class="checkin-card-time">Scheduled: ' + time + '</p>'
+      + '<button class="btn-primary" onclick="openCheckin()">Check in now</button>';
+  }
+}
+
+function renderSkipSection() {
+  var wrap = document.getElementById('skip-section');
+  var used = state.skipsThisWeek || 0;
+  if (used >= 2) {
+    wrap.innerHTML = '<p class="skip-count">' + used + '/2 skips used this week</p>'
+      + '<p class="skip-locked">It happens — but make sure to give Jordan extra motivation tomorrow.</p>';
+  } else {
+    wrap.innerHTML = '<p class="skip-count">' + used + '/2 skips used this week</p>'
+      + '<button class="btn-ghost" onclick="showSkipModal()" style="margin-top:10px">Not today</button>';
+  }
+}
+
+function renderNotifBanner() {
+  var banner = document.getElementById('notif-banner');
+  if (!banner) return;
+  if (state.notificationsEnabled || (typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
+    banner.classList.add('hidden');
+  } else {
+    banner.classList.remove('hidden');
+  }
+}
+
+// --- CHECK-IN ---
+function openCheckin() {
+  navHistory.push('screen-home');
+  var format = state.user && state.user.format ? state.user.format : 'voice';
+  switchCheckinMode(format === 'text' ? 'text' : 'voice');
+  showScreen('screen-checkin', 'forward');
+}
+
+function ciBack() {
+  stopRecording(true);
+  popScreen();
+}
+
+function switchCheckinMode(mode) {
+  document.getElementById('ci-voice-pane').classList.toggle('hidden', mode !== 'voice');
+  document.getElementById('ci-text-pane').classList.toggle('hidden', mode !== 'text');
+  document.getElementById('ci-tab-voice').classList.toggle('active', mode === 'voice');
+  document.getElementById('ci-tab-text').classList.toggle('active', mode === 'text');
+  if (mode === 'voice') resetRecordingUI();
+}
+
+function resetRecordingUI() {
+  pendingVoiceBase64 = null; pendingVoiceBlob = null; pendingVoiceDuration = 0;
+  var rb = document.getElementById('ci-record-btn');
+  var timer = document.getElementById('ci-timer');
+  var wf = document.getElementById('ci-waveform');
+  var pb = document.getElementById('ci-playback');
+  var ra = document.getElementById('ci-record-area');
+  if (rb) rb.classList.remove('recording');
+  if (timer) timer.textContent = '0:00';
+  if (wf) wf.classList.remove('active');
+  if (pb) pb.classList.add('hidden');
+  if (ra) ra.classList.remove('hidden');
+}
+
+async function toggleRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    stopRecording(false);
+  } else {
+    await startRecording();
+  }
+}
+
+async function startRecording() {
+  try {
+    var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    recordingStartTime = Date.now();
+    mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = function() {
+      var blob = new Blob(audioChunks, { type: 'audio/webm' });
+      pendingVoiceBlob = blob;
+      pendingVoiceDuration = Math.floor((Date.now() - recordingStartTime) / 1000);
+      var reader = new FileReader();
+      reader.onloadend = function() { pendingVoiceBase64 = reader.result; showPlaybackUI(); };
+      reader.readAsDataURL(blob);
+      stream.getTracks().forEach(function(t) { t.stop(); });
+    };
+    mediaRecorder.start();
+    document.getElementById('ci-record-btn').classList.add('recording');
+    document.getElementById('ci-waveform').classList.add('active');
+    var secs = 0;
+    recordingInterval = setInterval(function() {
+      secs++;
+      var m = Math.floor(secs/60); var s = secs%60;
+      document.getElementById('ci-timer').textContent = m + ':' + (s<10?'0':'') + s;
+    }, 1000);
+    recordingTimeout = setTimeout(function() { stopRecording(false); }, 60000);
+  } catch(e) {
+    showToast('Microphone access needed to record.');
+  }
+}
+
+function stopRecording(silent) {
+  if (recordingInterval) { clearInterval(recordingInterval); recordingInterval = null; }
+  if (recordingTimeout) { clearTimeout(recordingTimeout); recordingTimeout = null; }
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    if (!silent) {
+      document.getElementById('ci-record-btn').classList.remove('recording');
+      document.getElementById('ci-waveform').classList.remove('active');
+    }
+  }
+}
+
+function showPlaybackUI() {
+  document.getElementById('ci-record-area').classList.add('hidden');
+  document.getElementById('ci-playback').classList.remove('hidden');
+  document.getElementById('ci-play-duration').textContent = formatDuration(pendingVoiceDuration);
+}
+
+function playVoicePreview() {
+  if (!pendingVoiceBase64) return;
+  var audio = new Audio(pendingVoiceBase64);
+  audio.play().catch(function() {});
+}
+
+function reRecord() { resetRecordingUI(); }
+
+function sendVoiceNote() {
+  if (!pendingVoiceBase64) return;
+  localStorage.setItem('tether_voice_note', JSON.stringify({
+    data: pendingVoiceBase64, duration: pendingVoiceDuration, savedAt: new Date().toISOString()
+  }));
+  completeCheckIn();
+}
+
+function sendTextNote() {
+  var text = document.getElementById('ci-text-input').value.trim();
+  if (!text) { showToast('Write something first.'); return; }
+  completeCheckIn();
+}
+
+function completeCheckIn() {
+  var late = isLateCheckin();
+  state.checkedInToday = true;
+  state.checkedInLate = late;
+  state.lastCheckInDate = getTodayISO();
+  if (!late) { state.streak = (state.streak || 0) + 1; }
+  else if (state.streak === 0) { state.streak = 1; }
+  saveState();
+  popScreen();
+  setTimeout(function() {
+    renderHome();
+    showToast(late ? 'Checked in. Better late than never.' : 'Checked in. Streak extended.');
+  }, 400);
+}
+
+function toggleLateNote() {
+  var w = document.getElementById('late-note-wrap');
+  if (w) w.classList.toggle('hidden');
+}
+
+function saveLateNote() {
+  var inp = document.getElementById('late-note-input');
+  if (inp) { state.lateNote = inp.value; saveState(); }
+  showToast('Note saved.');
+  var w = document.getElementById('late-note-wrap');
+  if (w) w.classList.add('hidden');
+}
+
+// --- SKIP ---
+function showSkipModal() {
+  document.getElementById('modal-overlay').classList.add('active');
+  document.getElementById('modal-skip').classList.add('active');
+  document.getElementById('modal-rematch').classList.remove('active');
+}
+function closeSkipModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  document.getElementById('modal-skip').classList.remove('active');
+}
+function confirmSkip() {
+  state.skipsThisWeek = (state.skipsThisWeek || 0) + 1;
+  state.checkedInToday = true;
+  state.lastCheckInDate = getTodayISO();
+  saveState();
+  closeSkipModal();
+  renderHome();
+  showToast('Skip logged. Jordan will see this.');
+}
+
+// --- REMATCH ---
+function showRematchModal() {
+  document.getElementById('modal-overlay').classList.add('active');
+  document.getElementById('modal-rematch').classList.add('active');
+  document.getElementById('modal-skip').classList.remove('active');
+}
+function closeRematchModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  document.getElementById('modal-rematch').classList.remove('active');
+}
+function confirmRematch() {
+  closeRematchModal();
+  showToast("Rematch requested. We'll find you a new partner soon.");
+}
+
+// --- NOTIFICATIONS ---
+async function requestNotifications() {
+  if (!('Notification' in window)) { showToast('Notifications not supported here.'); return; }
+  var result = await Notification.requestPermission();
+  if (result === 'granted') {
+    state.notificationsEnabled = true;
+    saveState();
+    scheduleReminder();
+    renderNotifBanner();
+    var toggle = document.getElementById('notif-toggle');
+    if (toggle) toggle.checked = true;
+    showToast('Reminders enabled.');
+  } else {
+    showToast('Allow notifications in Safari Settings > Websites.');
+  }
+}
+
+function scheduleReminder() {
+  if (!state.user || !state.user.checkinTime || !state.notificationsEnabled) return;
+  var parts = state.user.checkinTime.split(':');
+  var h = parseInt(parts[0]); var m = parseInt(parts[1]);
+  var reminder = new Date();
+  reminder.setHours(h, m - 30, 0, 0);
+  if (reminder < new Date()) reminder.setDate(reminder.getDate() + 1);
+  var delay = reminder - new Date();
+  setTimeout(function() {
+    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+      new Notification('Tether', { body: "Your check-in is in 30 minutes. Don't let Jordan down." });
+    }
+  }, delay);
+}
+
+function toggleNotifications(val) {
+  if (val) { requestNotifications(); }
+  else { state.notificationsEnabled = false; saveState(); showToast('Reminders turned off.'); }
+}
+
+// --- PARTNER SCREEN ---
+function renderPartnerScreen() {
+  var pc = (state.contract && state.contract.partner) ? state.contract.partner : buildPartnerContract();
+  var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+  set('p-working-on', pc.workingOn);
+  set('p-overcoming', pc.overcoming);
+  set('p-callout', pc.callout);
+  set('p-streak', state.streak || 0);
+  set('p-skips', state.skipsThisWeek || 0);
+  var days = state.matchedDate ? Math.max(1, Math.floor((Date.now() - new Date(state.matchedDate)) / 86400000) + 1) : 1;
+  set('p-days', days);
+  var datel = document.getElementById('p-matched-date');
+  if (datel && state.matchedDate) {
+    datel.textContent = 'Matched ' + new Date(state.matchedDate).toLocaleDateString('en-US',{month:'long',day:'numeric'});
+  }
+}
+
+// --- PROFILE SCREEN ---
+function renderProfileScreen() {
+  var name = (state.user && state.user.name) ? state.user.name : 'You';
+  var initials = (state.user && state.user.initials) ? state.user.initials : 'YO';
+  var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+  set('prof-initials', initials);
+  set('prof-name', name);
+  var since = state.matchedDate
+    ? 'Member since ' + new Date(state.matchedDate).toLocaleDateString('en-US',{month:'long',year:'numeric'})
+    : 'Member since today';
+  set('prof-since', since);
+  set('prof-streak', state.streak || 0);
+  set('prof-skips', state.skipsThisWeek || 0);
+  var days = state.matchedDate ? Math.max(1, Math.floor((Date.now() - new Date(state.matchedDate)) / 86400000) + 1) : 1;
+  set('prof-days', days);
+  set('prof-format', capitalize(state.user && state.user.format ? state.user.format : 'voice'));
+  set('prof-time', formatTime(state.user && state.user.checkinTime ? state.user.checkinTime : '09:00'));
+}
+
+// --- SETTINGS ---
+function renderSettings() {
+  var toggle = document.getElementById('notif-toggle');
+  if (toggle) toggle.checked = state.notificationsEnabled && (typeof Notification !== 'undefined' && Notification.permission === 'granted');
+  var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+  set('settings-format', capitalize(state.user && state.user.format ? state.user.format : 'voice'));
+  set('settings-time', formatTime(state.user && state.user.checkinTime ? state.user.checkinTime : '09:00'));
+}
+
+// --- CONTRACT VIEW ---
+function openContractView(from) {
+  navHistory.push(from || activeTab);
+  populateContractView();
+  showScreen('screen-contract-view', 'forward');
+}
+
+function populateContractView() {
+  var uc = state.contract && state.contract.user;
+  var pc = (state.contract && state.contract.partner) ? state.contract.partner : buildPartnerContract();
+  var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+  if (uc) {
+    set('cv-u-working', uc.workingOn);
+    set('cv-u-overcoming', uc.overcoming);
+    set('cv-u-callout', uc.callout);
+    set('cv-u-because', uc.because);
+    set('cv-u-freq', capitalize(uc.frequency || 'daily'));
+    set('cv-u-time', formatTime(uc.checkinTime));
+  }
+  set('cv-p-working', pc.workingOn);
+  set('cv-p-overcoming', pc.overcoming);
+  set('cv-p-callout', pc.callout);
+  set('cv-p-because', pc.why);
+}
+
+// --- RESET ---
+function resetApp() {
+  if (confirm('Reset all app data? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('tether_voice_note');
+    location.reload();
+  }
+}
+
+// --- UTILS ---
+function getTodayISO() { return new Date().toISOString().split('T')[0]; }
+
+function getMondayISO() {
+  var d = new Date(); var day = d.getDay();
+  d.setDate(d.getDate() - day + (day === 0 ? -6 : 1));
+  return d.toISOString().split('T')[0];
+}
+
+function formatTime(t) {
+  if (!t) return '--:--';
+  var parts = t.split(':');
+  var h = parseInt(parts[0]); var m = parseInt(parts[1]);
+  var ampm = h >= 12 ? 'pm' : 'am';
+  var h12 = h % 12 || 12;
+  return h12 + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+}
+
+function formatDuration(secs) {
+  var m = Math.floor(secs/60); var s = secs%60;
+  return m + ':' + (s<10?'0':'') + s;
+}
+
+function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+// --- INIT ---
+function init() {
+  loadState();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js').catch(function(){});
+  }
+
+  // Directness slider
+  var slider = document.getElementById('directness-slider');
+  if (slider) {
+    slider.addEventListener('input', function() { updateDirectness(this.value); });
+    updateDirectness(3);
+  }
+
+  // Freq pills
+  document.querySelectorAll('.freq-pill').forEach(function(p) {
+    p.addEventListener('click', function() {
+      document.querySelectorAll('.freq-pill').forEach(function(pp) { pp.classList.remove('selected'); });
+      p.classList.add('selected');
+    });
+  });
+
+  // Bottom nav
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      activeTab = btn.dataset.screen;
+      switchTab(btn.dataset.screen);
+      if (btn.dataset.screen === 'screen-partner') renderPartnerScreen();
+      if (btn.dataset.screen === 'screen-profile') renderProfileScreen();
+      if (btn.dataset.screen === 'screen-settings') renderSettings();
+      if (btn.dataset.screen === 'screen-home') renderHome();
+    });
+  });
+
+  // Modal overlay click to close
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) { closeSkipModal(); closeRematchModal(); }
+  });
+
+  // Start screen
+  if (state.contract) {
+    checkDayRollover();
+    document.getElementById('bottom-nav').classList.remove('hidden');
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.screen === 'screen-home');
+    });
+    showScreen('screen-home', 'tab');
+    renderHome();
+  } else {
+    showScreen('screen-splash', 'tab');
+  }
+}
+
+window.addEventListener('load', init);
+</script>
 </body>
 </html>
