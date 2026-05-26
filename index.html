@@ -564,7 +564,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   background:var(--navy);border-radius:20px;
   padding:28px 24px;
   display:flex;flex-direction:row;align-items:center;
-  margin:20px 20px 0;min-height:140px;
+  margin:0;flex-shrink:0;
 }
 .hero-left{flex:1;display:flex;flex-direction:column;align-items:flex-start}
 .hero-divider{width:1px;height:80px;background:rgba(255,255,255,0.15);margin:0 20px;flex-shrink:0}
@@ -990,22 +990,27 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 /* ==============================
    HOME SCREEN — NEW LAYOUT
    ============================== */
-#screen-home{
-  display:flex!important;flex-direction:column!important;
-  height:100dvh;overflow:hidden!important;
+.home-screen{
+  position:fixed;
+  top:0;left:0;right:0;
+  bottom:calc(64px + env(safe-area-inset-bottom,0px));
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:20px 20px 16px;
   box-sizing:border-box;
+  background:#F7F8FA;
+  overflow:hidden;
 }
-.home-content{
-  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding:20px 20px 0;
-  display:flex;flex-direction:column;gap:16px;
-}
-.home-content .home-hero{margin:0!important}
-.home-footer{
+.home-header{
+  display:flex;align-items:baseline;justify-content:space-between;
   flex-shrink:0;
-  padding:16px 20px;
-  padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
-  background:var(--bg);
+}
+.home-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:22px;font-weight:700;color:#1B2E4B;
+}
+.home-date{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;color:#9E9E9E;font-weight:400;
 }
 .btn-checkin-main{
   width:100%;height:64px;
@@ -1013,6 +1018,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   border:none;border-radius:16px;
   font-family:inherit;font-size:18px;font-weight:600;
   cursor:pointer;letter-spacing:0.01em;
+  flex-shrink:0;
   transition:transform 0.08s ease,opacity 0.08s ease,background 0.2s ease;
   -webkit-tap-highlight-color:transparent;
 }
@@ -1023,7 +1029,8 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
    HOME — MESSAGE THREAD
    ============================== */
 .message-thread{
-  display:flex;flex-direction:column;gap:8px;
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  gap:8px;min-height:0;
 }
 .message-sender-row{
   display:flex;align-items:center;gap:10px;
@@ -1457,49 +1464,49 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 </div>
 
 <!-- HOME -->
-<div id="screen-home" class="screen">
-  <div class="home-content">
-    <div class="home-hero">
-      <div class="hero-left">
-        <span class="hero-label">STREAK</span>
-        <div class="hero-streak-number" id="streakDisplay">0</div>
-        <div class="hero-days-label">days</div>
+<div id="screen-home" class="screen home-screen">
+  <div class="home-header">
+    <span class="home-title">Tether</span>
+    <span class="home-date" id="homeDate"></span>
+  </div>
+  <div class="home-hero">
+    <div class="hero-left">
+      <span class="hero-label">STREAK</span>
+      <div class="hero-streak-number" id="streakDisplay">0</div>
+      <div class="hero-days-label">days</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-right">
+      <span class="hero-label">PARTNER</span>
+      <div class="hero-status-row">
+        <span class="hero-status-dot" id="partnerDot"></span>
+        <span class="hero-status-text" id="partnerStatus">Checked in</span>
       </div>
-      <div class="hero-divider"></div>
-      <div class="hero-right">
-        <span class="hero-label">PARTNER</span>
-        <div class="hero-status-row">
-          <span class="hero-status-dot" id="partnerDot"></span>
-          <span class="hero-status-text" id="partnerStatus">Checked in</span>
-        </div>
-        <span class="hero-together" id="heroTogether"></span>
+      <span class="hero-together" id="heroTogether"></span>
+    </div>
+  </div>
+  <div class="message-thread">
+    <div class="message-sender-row">
+      <div class="message-avatar">JM</div>
+      <div class="message-sender-meta">
+        <span class="message-sender-name">Jordan</span>
+        <span class="message-sender-time">7:14 AM</span>
       </div>
     </div>
-    <div class="message-thread">
-      <div class="message-sender-row">
-        <div class="message-avatar">JM</div>
-        <div class="message-sender-meta">
-          <span class="message-sender-name">Jordan</span>
-          <span class="message-sender-time">7:14 AM</span>
-        </div>
+    <div class="message-bubble-wrap">
+      <div class="message-bubble" id="jordanNoteBubble">
+        "Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."
       </div>
-      <div class="message-bubble-wrap">
-        <div class="message-bubble" id="jordanNoteBubble">
-          "Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."
-        </div>
-        <div class="message-replied-badge" id="repliedBadge" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12">
-            <path d="M5 12l5 5L19 7"/>
-          </svg>
-          You responded
-        </div>
+      <div class="message-replied-badge" id="repliedBadge" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12">
+          <path d="M5 12l5 5L19 7"/>
+        </svg>
+        You responded
       </div>
     </div>
   </div>
-  <div class="home-footer">
-    <div id="checkin-card">
-      <button class="btn-checkin-main" onclick="openCheckin()">Check in now</button>
-    </div>
+  <div id="checkin-card">
+    <button class="btn-checkin-main" onclick="openCheckin()">Check in now</button>
   </div>
 </div>
 
@@ -2021,10 +2028,18 @@ function signContract() {
 // --- HOME ---
 function renderHome() {
   checkDayRollover();
+  renderHomeDate();
   renderStreakNumber();
   renderHeroPartner();
   renderCheckinCard();
   renderRepliedBadge();
+}
+
+function renderHomeDate() {
+  var dateEl = document.getElementById('homeDate');
+  if (!dateEl) return;
+  var now = new Date();
+  dateEl.textContent = now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
 }
 
 function renderStreakNumber() {
