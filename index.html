@@ -72,42 +72,36 @@ body{
 /* BOTTOM NAV */
 #bottom-nav{
   position:fixed;
-  bottom:0;left:50%;
-  transform:translateX(-50%);
+  bottom:0;left:50%;transform:translateX(-50%);
   width:100%;max-width:480px;
-  height:72px;
+  height:calc(64px + env(safe-area-inset-bottom,0px));
   background:#FFFFFF;
-  border-top:1px solid #E0E0E0;
-  display:flex;
+  border-top:1px solid #E8E8E8;
+  display:flex;align-items:stretch;
   z-index:9999;
   padding-bottom:env(safe-area-inset-bottom,0px);
+  overflow:hidden;
 }
 #bottom-nav.hidden{display:none}
 .tab-btn{
   flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  background:none;border:none;
-  cursor:pointer;
-  color:#9E9E9E;
-  font-family:inherit;
-  font-size:10px;font-weight:500;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;padding:0;margin:0;
+  background:none;border:none;cursor:pointer;
+  color:#B0B8C1;
+  font-family:inherit;font-size:10px;font-weight:500;
   letter-spacing:0.02em;
-  padding:8px 0;
-  transition:color 0.15s;
   -webkit-tap-highlight-color:transparent;
-  min-width:0;
+  height:64px;transition:color 0.15s;
 }
 .tab-btn.active{color:#1B2E4B}
-.tab-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.5;display:block;flex-shrink:0}
+.tab-btn:not(.active){color:#B0B8C1}
+.tab-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;display:block;flex-shrink:0}
 
 /* TOAST */
 #toast{
   position:fixed;
-  bottom:calc(88px + env(safe-area-inset-bottom,0px) + 12px);left:50%;
+  bottom:calc(80px + env(safe-area-inset-bottom,0px) + 12px);left:50%;
   transform:translateX(-50%);
   background:var(--navy);
   color:var(--white);
@@ -287,7 +281,7 @@ input[type="range"]::-webkit-slider-thumb{
 .section-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--g4);margin:24px 0 10px}
 
 /* SCREEN PADDING */
-.screen-pad{padding:0 20px calc(88px + env(safe-area-inset-bottom,0px))}
+.screen-pad{padding:0 20px calc(80px + env(safe-area-inset-bottom,0px))}
 .screen-top{padding:20px 20px 0}
 
 /* DIVIDER */
@@ -383,53 +377,61 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 /* ==============================
    ONBOARDING SCREENS
    ============================== */
-.ob-pill-screen{
-  display:flex;flex-direction:column;align-items:center;
-  padding:0 0 calc(56px + env(safe-area-inset-bottom,0px));
-  min-height:100dvh;
+.ob-screen{
+  display:flex!important;flex-direction:column!important;
+  height:100dvh;overflow:hidden!important;background:var(--white);
 }
+.ob-content{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:48px 24px 24px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.ob-footer{
+  flex-shrink:0;
+  padding:16px 24px;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  background:var(--white);border-top:1px solid #F0F0F0;
+}
+.ob-footer-btn{
+  display:block;width:100%;height:56px;
+  background:var(--navy);color:var(--white);
+  border:none;border-radius:14px;
+  font-family:inherit;font-size:16px;font-weight:600;
+  cursor:pointer;text-align:center;
+  transition:opacity 0.15s,transform 0.08s ease,background-color 0.08s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.ob-footer-btn:active{background-color:#152540;transform:scale(0.96)}
+.ob-footer-btn:disabled{opacity:0.4;pointer-events:none;cursor:default}
 .ob-step-label{
   font-size:12px;font-weight:500;color:#9E9E9E;
-  text-align:center;margin-top:48px;margin-bottom:32px;
-  letter-spacing:0.01em;
+  text-align:center;margin-bottom:32px;letter-spacing:0.01em;
 }
 .ob-question{
   font-size:26px;font-weight:700;color:var(--navy);
   line-height:1.2;text-align:center;
-  padding:0 32px;margin-bottom:8px;width:100%;
+  padding:0 8px;margin-bottom:8px;width:100%;
 }
 .ob-subtext{
   font-size:13px;font-weight:400;color:#9E9E9E;
-  text-align:center;padding:0 32px;margin-bottom:36px;
-  line-height:1.5;
+  text-align:center;margin-bottom:36px;line-height:1.5;
 }
 .ob-pills{width:100%}
 .ob-pill{
-  display:block;
-  width:calc(100% - 48px);margin:0 auto 12px;
-  padding:16px 24px;
-  background:var(--bg);border:1.5px solid #E0E0E0;border-radius:999px;
+  display:flex;align-items:center;gap:12px;
+  width:100%;margin:0 0 12px;
+  padding:16px 20px;
+  background:var(--white);border:1.5px solid #E0E0E0;border-radius:999px;
   font-family:inherit;font-size:15px;font-weight:500;color:var(--navy);
-  text-align:center;cursor:pointer;
+  text-align:left;cursor:pointer;
   transition:transform 0.08s ease,background 0.1s ease,border-color 0.1s ease,color 0.1s ease;
   -webkit-tap-highlight-color:transparent;
 }
 .ob-pill:active{transform:scale(0.96)}
 .ob-pill.selected{background:var(--navy);border-color:var(--navy);color:#FFFFFF}
-.ob-continue-btn{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  height:calc(56px + env(safe-area-inset-bottom,0px));
-  padding-bottom:env(safe-area-inset-bottom,0px);
-  background:var(--navy);color:#FFFFFF;
-  border:none;
-  font-family:inherit;font-size:16px;font-weight:600;
-  cursor:pointer;text-align:center;
-  transition:opacity 0.15s,transform 0.08s ease;
-  -webkit-tap-highlight-color:transparent;
-}
-.ob-continue-btn:active{opacity:0.85}
-.ob-continue-btn:disabled{opacity:0.4;pointer-events:none;cursor:default}
+.ob-pill.selected svg{stroke:#FFFFFF!important}
+.ob-pill svg{width:20px;height:20px;stroke:var(--navy);fill:none;stroke-width:1.5;flex-shrink:0;transition:stroke 0.1s ease}
+.ob-pill-center{justify-content:center}
 
 /* ==============================
    MATCHING SCREEN
@@ -559,30 +561,58 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
    HOME SCREEN
    ============================== */
 .home-hero{
-  background:var(--navy);
-  padding:48px 20px 24px;
-  display:flex;align-items:flex-start;justify-content:space-between;
-  gap:16px;
+  background:var(--navy);border-radius:20px;
+  padding:28px 24px;
+  display:flex;flex-direction:row;align-items:center;
+  margin:20px 20px 0;min-height:140px;
 }
-.home-hero-left{}
-.home-hero-greeting{font-size:14px;font-weight:500;color:rgba(255,255,255,0.55);margin-bottom:4px}
-.home-hero-streak{font-size:40px;font-weight:700;color:var(--white);line-height:1;letter-spacing:-0.02em}
-.home-hero-streak-label{font-size:13px;font-weight:500;color:rgba(255,255,255,0.55);margin-top:4px}
-.home-hero-right{
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:14px;
-  padding:14px 16px;
-  min-width:120px;flex-shrink:0;
-  text-align:right;
+.hero-left{flex:1;display:flex;flex-direction:column;align-items:flex-start}
+.hero-divider{width:1px;height:80px;background:rgba(255,255,255,0.15);margin:0 20px;flex-shrink:0}
+.hero-right{flex:1;display:flex;flex-direction:column;align-items:flex-start}
+.hero-label{
+  font-family:inherit;font-size:10px;font-weight:500;
+  letter-spacing:0.08em;color:rgba(255,255,255,0.5);
+  margin-bottom:6px;display:block;
 }
-.home-hero-partner-label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px}
-.home-hero-partner-name{font-size:15px;font-weight:700;color:var(--white)}
-.home-hero-partner-status{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:4px}
-.home-hero-partner-status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0}
-.home-hero-partner-status-txt{font-size:12px;font-weight:500;color:rgba(255,255,255,0.65)}
-.checkin-card-label{font-size:12px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
-.checkin-card-time{font-size:13px;color:var(--g4);margin-bottom:16px}
+.hero-streak-number{
+  font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:56px;font-weight:700;color:var(--white);
+  line-height:1;margin-bottom:4px;
+  -webkit-font-smoothing:antialiased;
+}
+.hero-days-label{font-family:inherit;font-size:13px;color:rgba(255,255,255,0.5)}
+.hero-status-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;margin-top:6px}
+.hero-status-dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  background:var(--success);display:inline-block;
+}
+.hero-status-dot.pending{background:var(--warning)}
+.hero-status-text{font-family:inherit;font-size:14px;font-weight:500;color:var(--white)}
+.hero-together{font-family:inherit;font-size:11px;color:rgba(255,255,255,0.4)}
+/* Week strip */
+.week-strip{margin:16px 20px 0}
+.week-strip-label{
+  font-family:inherit;font-size:10px;font-weight:500;
+  letter-spacing:0.08em;color:#9E9E9E;margin-bottom:10px;
+}
+.week-strip-days{display:flex;justify-content:space-between;gap:6px}
+.week-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.week-day-label{font-family:inherit;font-size:10px;color:#9E9E9E}
+.week-day-dot{width:28px;height:28px;border-radius:50%;background:#F0F0F0}
+.week-day-dot.checked{background:var(--navy)}
+.week-day-dot.today{border:2px solid var(--navy);background:var(--white)}
+.week-day-dot.today.checked{background:var(--navy)}
+/* Check-in CTA */
+.checkin-cta{
+  margin:20px 20px 0;background:var(--white);
+  border:1.5px solid var(--navy);border-radius:16px;padding:20px;
+}
+.checkin-cta-label{
+  font-family:inherit;font-size:11px;font-weight:500;
+  letter-spacing:0.08em;color:#9E9E9E;margin-bottom:8px;
+  text-transform:uppercase;
+}
+.checkin-cta-scheduled{font-family:inherit;font-size:13px;color:var(--navy);margin-bottom:14px}
 .partner-note{
   font-size:14px;color:var(--g5);
   font-style:italic;line-height:1.5;
@@ -611,6 +641,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   border:1.5px dashed var(--g3);
   border-radius:12px;padding:14px 16px;
   display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;bottom:0;margin:0 0 16px;
 }
 .notif-banner.hidden{display:none}
 .notif-banner-text{font-size:13px;color:var(--g5);line-height:1.4;font-weight:500}
@@ -971,51 +1002,78 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 </div>
 
 <!-- ONBOARDING A: When are you most active? -->
-<div id="screen-ob-a" class="screen">
-  <div class="ob-pill-screen">
+<div id="screen-ob-a" class="screen ob-screen">
+  <div class="ob-content">
     <p class="ob-step-label">1 of 3</p>
     <h2 class="ob-question">When are you most active?</h2>
     <p class="ob-subtext">This sets the window for your daily check-ins with your partner.</p>
     <div class="ob-pills">
-      <button class="ob-pill" data-val="morning" onclick="selectObPill(this,'q3')">Morning</button>
-      <button class="ob-pill" data-val="afternoon" onclick="selectObPill(this,'q3')">Afternoon</button>
-      <button class="ob-pill" data-val="evening" onclick="selectObPill(this,'q3')">Evening</button>
-      <button class="ob-pill" data-val="late" onclick="selectObPill(this,'q3')">Late night</button>
+      <button class="ob-pill" data-val="morning" onclick="selectObPill(this,'q3')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        Morning
+      </button>
+      <button class="ob-pill" data-val="afternoon" onclick="selectObPill(this,'q3')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M4.22 4.22l1.42 1.42M2 12h2M20 12h2"/></svg>
+        Afternoon
+      </button>
+      <button class="ob-pill" data-val="evening" onclick="selectObPill(this,'q3')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        Evening
+      </button>
+      <button class="ob-pill" data-val="late" onclick="selectObPill(this,'q3')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/><path d="M12 2v2M19 5l-1.5 1.5"/></svg>
+        Late night
+      </button>
     </div>
   </div>
-  <button class="ob-continue-btn" id="ob-a-continue" onclick="continueObA()" disabled>Continue</button>
+  <div class="ob-footer">
+    <button class="ob-footer-btn" id="ob-a-continue" onclick="continueObA()" disabled>Continue</button>
+  </div>
 </div>
 
 <!-- ONBOARDING B: How direct do you want your partner to be? -->
-<div id="screen-ob-b" class="screen">
-  <div class="ob-pill-screen">
+<div id="screen-ob-b" class="screen ob-screen">
+  <div class="ob-content">
     <p class="ob-step-label">2 of 3</p>
     <h2 class="ob-question">How direct do you want your partner to be?</h2>
     <p class="ob-subtext">This shapes how your partner gives you feedback.</p>
     <div class="ob-pills">
-      <button class="ob-pill" data-val="1" onclick="selectObPill(this,'q4')">1 — Soft encouragement</button>
-      <button class="ob-pill" data-val="2" onclick="selectObPill(this,'q4')">2 — Mostly gentle</button>
-      <button class="ob-pill selected" data-val="3" onclick="selectObPill(this,'q4')">3 — Balanced</button>
-      <button class="ob-pill" data-val="4" onclick="selectObPill(this,'q4')">4 — Honest feedback</button>
-      <button class="ob-pill" data-val="5" onclick="selectObPill(this,'q4')">5 — No filter, full truth</button>
+      <button class="ob-pill ob-pill-center" data-val="1" onclick="selectObPill(this,'q4')">1 — Soft encouragement</button>
+      <button class="ob-pill ob-pill-center" data-val="2" onclick="selectObPill(this,'q4')">2 — Mostly gentle</button>
+      <button class="ob-pill ob-pill-center selected" data-val="3" onclick="selectObPill(this,'q4')">3 — Balanced</button>
+      <button class="ob-pill ob-pill-center" data-val="4" onclick="selectObPill(this,'q4')">4 — Honest feedback</button>
+      <button class="ob-pill ob-pill-center" data-val="5" onclick="selectObPill(this,'q4')">5 — No filter, full truth</button>
     </div>
   </div>
-  <button class="ob-continue-btn" id="ob-b-continue" onclick="continueObB()">Continue</button>
+  <div class="ob-footer">
+    <button class="ob-footer-btn" id="ob-b-continue" onclick="continueObB()">Continue</button>
+  </div>
 </div>
 
 <!-- ONBOARDING C: How do you prefer to check in? -->
-<div id="screen-ob-c" class="screen">
-  <div class="ob-pill-screen">
+<div id="screen-ob-c" class="screen ob-screen">
+  <div class="ob-content">
     <p class="ob-step-label">3 of 3</p>
     <h2 class="ob-question">How do you prefer to check in?</h2>
     <p class="ob-subtext">Your partner will match your preferred format.</p>
     <div class="ob-pills">
-      <button class="ob-pill" data-val="voice" onclick="selectObPill(this,'q5')">Voice notes</button>
-      <button class="ob-pill" data-val="text" onclick="selectObPill(this,'q5')">Text messages</button>
-      <button class="ob-pill" data-val="either" onclick="selectObPill(this,'q5')">Either works</button>
+      <button class="ob-pill" data-val="voice" onclick="selectObPill(this,'q5')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0M12 19v3M8 22h8"/></svg>
+        Voice notes
+      </button>
+      <button class="ob-pill" data-val="text" onclick="selectObPill(this,'q5')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Text messages
+      </button>
+      <button class="ob-pill" data-val="either" onclick="selectObPill(this,'q5')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8l4 4-4 4"/></svg>
+        Either works
+      </button>
     </div>
   </div>
-  <button class="ob-continue-btn" id="ob-c-continue" onclick="continueObC()" disabled>Find My Match</button>
+  <div class="ob-footer">
+    <button class="ob-footer-btn" id="ob-c-continue" onclick="continueObC()" disabled>Find My Match</button>
+  </div>
 </div>
 
 <!-- MATCHING -->
@@ -1088,8 +1146,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   <div class="cs-scroll">
     <p class="cs-name-label">Your name</p>
     <input class="cs-name-input" type="text" id="c1-name" placeholder="What should we call you?"/>
-    <div class="cs-divider"></div>
-    <textarea class="cs-textarea" id="c1-working-on" placeholder="Be specific. Vague goals don't get done." style="margin-top:16px"></textarea>
+    <textarea class="cs-textarea" id="c1-working-on" placeholder="Be specific. Vague goals don't get done." style="margin-top:8px"></textarea>
     <div class="cs-partner-hint">
       <p class="cs-partner-hint-label">Jordan is working on</p>
       <p class="cs-partner-hint-text" id="cp1-working-on">growing my freelance design business to full-time income</p>
@@ -1107,8 +1164,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
     <h2 class="cs-question">Call me out when...</h2>
   </div>
   <div class="cs-scroll">
-    <div class="cs-divider"></div>
-    <textarea class="cs-textarea" id="c2-callout" placeholder="What does giving up look like for you?" style="margin-top:16px"></textarea>
+    <textarea class="cs-textarea" id="c2-callout" placeholder="What does giving up look like for you?" style="margin-top:8px"></textarea>
     <div class="cs-partner-hint">
       <p class="cs-partner-hint-label">Call Jordan out when</p>
       <p class="cs-partner-hint-text" id="cp2-callout">they start second-guessing themselves or disappear for more than a day</p>
@@ -1141,8 +1197,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
     <h2 class="cs-question">Why is this time different?</h2>
   </div>
   <div class="cs-scroll">
-    <div class="cs-divider"></div>
-    <textarea class="cs-textarea" id="c4-because" placeholder="Say it like you mean it." style="margin-top:16px"></textarea>
+    <textarea class="cs-textarea" id="c4-because" placeholder="Say it like you mean it." style="margin-top:8px"></textarea>
     <div class="cs-partner-hint">
       <p class="cs-partner-hint-label">Jordan's why</p>
       <p class="cs-partner-hint-text" id="cp4-why">I've played it safe my whole life and I'm done with that</p>
@@ -1160,28 +1215,39 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 
 <!-- HOME -->
 <div id="screen-home" class="screen">
-  <div class="home-hero" id="home-hero">
-    <div class="home-hero-left">
-      <p class="home-hero-greeting" id="home-greeting">Hey, there</p>
-      <p class="home-hero-streak" id="home-streak">0</p>
-      <p class="home-hero-streak-label">day streak</p>
+  <!-- Hero card -->
+  <div class="home-hero">
+    <div class="hero-left">
+      <span class="hero-label">STREAK</span>
+      <div class="hero-streak-number" id="streakDisplay">0</div>
+      <div class="hero-days-label">days</div>
     </div>
-    <div class="home-hero-right">
-      <p class="home-hero-partner-label">Partner</p>
-      <p class="home-hero-partner-name">Jordan</p>
-      <div class="home-hero-partner-status">
-        <div class="home-hero-partner-status-dot"></div>
-        <span class="home-hero-partner-status-txt">Checked in</span>
+    <div class="hero-divider"></div>
+    <div class="hero-right">
+      <span class="hero-label">PARTNER</span>
+      <div class="hero-status-row">
+        <span class="hero-status-dot" id="partnerDot"></span>
+        <span class="hero-status-text" id="partnerStatus">Checked in</span>
       </div>
+      <span class="hero-together" id="heroTogether"></span>
     </div>
   </div>
-  <div class="screen-pad screen-top">
-    <div class="section-label">Your check-in</div>
-    <div class="card" id="checkin-card">
-      <p class="checkin-card-label">Today's check-in</p>
-      <button class="btn-primary" onclick="openCheckin()">Check in now</button>
-    </div>
 
+  <!-- Week strip -->
+  <div class="week-strip">
+    <p class="week-strip-label">THIS WEEK</p>
+    <div class="week-strip-days" id="weekStripDays"></div>
+  </div>
+
+  <!-- Check-in CTA -->
+  <div class="checkin-cta" id="checkin-card">
+    <p class="checkin-cta-label">TODAY'S CHECK-IN</p>
+    <p class="checkin-cta-scheduled" id="checkin-scheduled">Scheduled: 9:00 am</p>
+    <button class="btn-primary" onclick="openCheckin()">Check in now</button>
+  </div>
+
+  <!-- Rest of home content -->
+  <div class="screen-pad screen-top">
     <div class="section-label">Your partner</div>
     <div class="card" id="partner-card">
       <div class="partner-mini-header">
@@ -1601,7 +1667,7 @@ function selectObPill(el, q) {
   var pills = el.closest('.ob-pills').querySelectorAll('.ob-pill');
   pills.forEach(function(p) { p.classList.remove('selected'); });
   el.classList.add('selected');
-  var btn = el.closest('.screen').querySelector('.ob-continue-btn');
+  var btn = el.closest('.screen').querySelector('.ob-footer-btn');
   if (btn) btn.disabled = false;
 }
 
@@ -1742,15 +1808,65 @@ function signContract() {
 // --- HOME ---
 function renderHome() {
   checkDayRollover();
-  var name = state.user && state.user.name ? state.user.name : 'there';
-  var first = name.split(' ')[0];
-  var greetEl = document.getElementById('home-greeting');
-  var streakNumEl = document.getElementById('home-streak');
-  if (greetEl) greetEl.textContent = 'Hey, ' + first;
-  if (streakNumEl) streakNumEl.textContent = (state.streak || 0).toString();
+  renderStreakNumber();
+  renderHeroPartner();
+  renderWeekStrip();
   renderCheckinCard();
   renderSkipSection();
   renderNotifBanner();
+}
+
+function renderStreakNumber() {
+  var el = document.getElementById('streakDisplay');
+  if (el) el.textContent = (state.streak || 0).toString();
+}
+
+function renderHeroPartner() {
+  var dot = document.getElementById('partnerDot');
+  var statusEl = document.getElementById('partnerStatus');
+  var togetherEl = document.getElementById('heroTogether');
+  // Jordan is always checked in (simulated)
+  if (dot) dot.className = 'hero-status-dot';
+  if (statusEl) statusEl.textContent = 'Checked in';
+  if (togetherEl) {
+    var days = state.matchedDate
+      ? Math.max(1, Math.floor((Date.now() - new Date(state.matchedDate)) / 86400000) + 1)
+      : 1;
+    togetherEl.textContent = days + ' day' + (days === 1 ? '' : 's') + ' together';
+  }
+}
+
+function renderWeekStrip() {
+  var container = document.getElementById('weekStripDays');
+  if (!container) return;
+  var today = new Date();
+  var dayOfWeek = today.getDay(); // 0=Sun
+  var monday = new Date(today);
+  monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+  monday.setHours(0, 0, 0, 0);
+  var dayNames = ['M','T','W','T','F','S','S'];
+  var todayISO = getTodayISO();
+  container.innerHTML = '';
+  for (var i = 0; i < 7; i++) {
+    var day = new Date(monday);
+    day.setDate(monday.getDate() + i);
+    var dayISO = day.toISOString().split('T')[0];
+    var isToday = dayISO === todayISO;
+    var isChecked = isToday && state.checkedInToday;
+    var dayEl = document.createElement('div');
+    dayEl.className = 'week-day';
+    var labelEl = document.createElement('div');
+    labelEl.className = 'week-day-label';
+    labelEl.textContent = dayNames[i];
+    var dotEl = document.createElement('div');
+    var cls = 'week-day-dot';
+    if (isToday) cls += ' today';
+    if (isChecked) cls += ' checked';
+    dotEl.className = cls;
+    dayEl.appendChild(labelEl);
+    dayEl.appendChild(dotEl);
+    container.appendChild(dayEl);
+  }
 }
 
 function checkDayRollover() {
@@ -1784,22 +1900,25 @@ function isLateCheckin() {
 
 function renderCheckinCard() {
   var card = document.getElementById('checkin-card');
+  if (!card) return;
   if (state.checkedInToday) {
     if (state.checkedInLate) {
-      card.innerHTML = '<div class="checkin-status amber"><div class="status-dot amber"></div><span>Checked in late</span></div>'
+      card.innerHTML = '<p class="checkin-cta-label">TODAY\'S CHECK-IN</p>'
+        + '<div class="checkin-status amber"><div class="status-dot amber"></div><span>Checked in late</span></div>'
         + '<button class="late-expand-btn" onclick="toggleLateNote()">Add a note on why</button>'
         + '<div id="late-note-wrap" class="late-note-wrap hidden">'
         + '<textarea id="late-note-input" rows="3" placeholder="Optional — Jordan will see this">' + (state.lateNote||'') + '</textarea>'
         + '<button class="btn-sm" onclick="saveLateNote()">Save note</button>'
         + '</div>';
     } else {
-      card.innerHTML = '<div class="checkin-status green"><div class="status-dot green"></div><span>Checked in today</span></div>'
+      card.innerHTML = '<p class="checkin-cta-label">TODAY\'S CHECK-IN</p>'
+        + '<div class="checkin-status green"><div class="status-dot green"></div><span>Checked in today</span></div>'
         + '<p class="checkin-sub">You showed up. Keep the streak going.</p>';
     }
   } else {
     var time = formatTime(state.user && state.user.checkinTime ? state.user.checkinTime : '09:00');
-    card.innerHTML = '<p class="checkin-card-label">Today\'s check-in</p>'
-      + '<p class="checkin-card-time">Scheduled: ' + time + '</p>'
+    card.innerHTML = '<p class="checkin-cta-label">TODAY\'S CHECK-IN</p>'
+      + '<p class="checkin-cta-scheduled">Scheduled: ' + time + '</p>'
       + '<button class="btn-primary" onclick="openCheckin()">Check in now</button>';
   }
 }
@@ -2218,6 +2337,9 @@ function init() {
   } else {
     showScreen('screen-splash', 'tab');
   }
+
+  // Re-render streak number once Space Grotesk is ready (prevents "U" flash)
+  document.fonts.ready.then(function() { renderStreakNumber(); });
 }
 
 window.addEventListener('load', init);
