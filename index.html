@@ -993,12 +993,12 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 #screen-home{
   display:flex!important;flex-direction:column!important;
   height:100dvh;overflow:hidden!important;
-  padding-bottom:calc(64px + env(safe-area-inset-bottom,0px));
   box-sizing:border-box;
 }
 .home-content{
   flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:20px 20px 0;
+  display:flex;flex-direction:column;gap:16px;
 }
 .home-content .home-hero{margin:0!important}
 .home-footer{
@@ -1013,12 +1013,57 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   border:none;border-radius:16px;
   font-family:inherit;font-size:18px;font-weight:600;
   cursor:pointer;letter-spacing:0.01em;
-  transition:transform 0.08s ease,opacity 0.08s ease;
+  transition:transform 0.08s ease,opacity 0.08s ease,background 0.2s ease;
   -webkit-tap-highlight-color:transparent;
 }
 .btn-checkin-main:active{transform:scale(0.97);opacity:0.9}
-.btn-checkin-main.is-checked{background:var(--success);pointer-events:none;cursor:default}
-.btn-checkin-main.is-late{background:var(--warning);pointer-events:none;cursor:default}
+.btn-checkin-main.done{background:#F0F0F0;color:#9E9E9E;pointer-events:none;cursor:default}
+
+/* ==============================
+   HOME — MESSAGE THREAD
+   ============================== */
+.message-thread{
+  display:flex;flex-direction:column;gap:8px;
+}
+.message-sender-row{
+  display:flex;align-items:center;gap:10px;
+}
+.message-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:#1B2E4B;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:11px;font-weight:600;color:white;
+  flex-shrink:0;
+}
+.message-sender-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;font-weight:600;color:#1B2E4B;
+}
+.message-sender-time{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:11px;color:#9E9E9E;margin-left:6px;
+}
+.message-bubble-wrap{
+  padding-left:42px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.message-bubble{
+  background:#E8EDF2;
+  border-radius:18px;
+  border-top-left-radius:4px;
+  padding:12px 16px;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:15px;color:#1B2E4B;
+  line-height:1.5;font-style:italic;
+  display:inline-block;max-width:100%;
+}
+.message-replied-badge{
+  display:flex;align-items:center;gap:5px;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:11px;font-weight:500;color:#27AE60;
+}
+.message-replied-badge svg{stroke:#27AE60;flex-shrink:0;}
 
 /* ==============================
    PARTNER TAB — NEW LAYOUT
@@ -1428,6 +1473,26 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
           <span class="hero-status-text" id="partnerStatus">Checked in</span>
         </div>
         <span class="hero-together" id="heroTogether"></span>
+      </div>
+    </div>
+    <div class="message-thread">
+      <div class="message-sender-row">
+        <div class="message-avatar">JM</div>
+        <div class="message-sender-meta">
+          <span class="message-sender-name">Jordan</span>
+          <span class="message-sender-time">7:14 AM</span>
+        </div>
+      </div>
+      <div class="message-bubble-wrap">
+        <div class="message-bubble" id="jordanNoteBubble">
+          "Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."
+        </div>
+        <div class="message-replied-badge" id="repliedBadge" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12">
+            <path d="M5 12l5 5L19 7"/>
+          </svg>
+          You responded
+        </div>
       </div>
     </div>
   </div>
@@ -1959,6 +2024,7 @@ function renderHome() {
   renderStreakNumber();
   renderHeroPartner();
   renderCheckinCard();
+  renderRepliedBadge();
 }
 
 function renderStreakNumber() {
@@ -2047,14 +2113,16 @@ function renderCheckinCard() {
   var card = document.getElementById('checkin-card');
   if (!card) return;
   if (state.checkedInToday) {
-    if (state.checkedInLate) {
-      card.innerHTML = '<button class="btn-checkin-main is-late" disabled>✓ Checked in late</button>';
-    } else {
-      card.innerHTML = '<button class="btn-checkin-main is-checked" disabled>✓ Checked in today</button>';
-    }
+    card.innerHTML = '<button class="btn-checkin-main done" disabled>Checked in today</button>';
   } else {
     card.innerHTML = '<button class="btn-checkin-main" onclick="openCheckin()">Check in now</button>';
   }
+}
+
+function renderRepliedBadge() {
+  var badge = document.getElementById('repliedBadge');
+  if (!badge) return;
+  badge.style.display = state.checkedInToday ? 'flex' : 'none';
 }
 
 function renderSkipSection() {
