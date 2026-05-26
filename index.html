@@ -986,6 +986,207 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 }
 #contract-confirm.active{opacity:1;pointer-events:all}
 .confirm-text{font-size:22px;font-weight:600;color:var(--navy);text-align:center}
+
+/* ==============================
+   HOME SCREEN — NEW LAYOUT
+   ============================== */
+#screen-home{
+  display:flex!important;flex-direction:column!important;
+  height:100dvh;overflow:hidden!important;
+  padding-bottom:calc(64px + env(safe-area-inset-bottom,0px));
+  box-sizing:border-box;
+}
+.home-content{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:20px 20px 0;
+}
+.home-content .home-hero{margin:0!important}
+.home-footer{
+  flex-shrink:0;
+  padding:16px 20px;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  background:var(--bg);
+}
+.btn-checkin-main{
+  width:100%;height:64px;
+  background:var(--navy);color:var(--white);
+  border:none;border-radius:16px;
+  font-family:inherit;font-size:18px;font-weight:600;
+  cursor:pointer;letter-spacing:0.01em;
+  transition:transform 0.08s ease,opacity 0.08s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-checkin-main:active{transform:scale(0.97);opacity:0.9}
+.btn-checkin-main.is-checked{background:var(--success);pointer-events:none;cursor:default}
+.btn-checkin-main.is-late{background:var(--warning);pointer-events:none;cursor:default}
+
+/* ==============================
+   PARTNER TAB — NEW LAYOUT
+   ============================== */
+.partner-tab-wrap{
+  padding-bottom:calc(64px + env(safe-area-inset-bottom,0px) + 16px);
+}
+.partner-note-card{
+  background:var(--white);border-radius:16px;
+  border:0.5px solid #E8E8E8;padding:20px;
+  margin:20px 20px 12px;
+}
+.partner-note-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;
+}
+.partner-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;font-size:13px;font-weight:600;color:var(--white);
+  flex-shrink:0;
+}
+.partner-name-label{
+  font-family:inherit;font-size:15px;font-weight:600;color:var(--navy);display:block;
+}
+.partner-checked-label{
+  font-family:inherit;font-size:12px;color:var(--success);font-weight:500;
+  display:block;margin-top:2px;
+}
+.partner-note-text{
+  font-family:inherit;font-size:15px;color:var(--navy);
+  font-style:italic;line-height:1.6;margin:0;
+}
+.contract-dropdown{
+  background:var(--white);border-radius:16px;
+  border:0.5px solid #E8E8E8;
+  margin:0 20px;overflow:hidden;
+}
+.contract-dropdown-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.contract-dropdown-title{
+  font-family:inherit;font-size:15px;font-weight:500;color:var(--navy);
+}
+.contract-chevron{
+  width:20px;height:20px;stroke:#9E9E9E;fill:none;stroke-width:1.5;
+  flex-shrink:0;transition:transform 0.2s ease;display:block;
+}
+.contract-chevron.open{transform:rotate(180deg)}
+.contract-dropdown-body{
+  display:none;padding:0 20px 20px;border-top:1px solid #F0F0F0;
+}
+.contract-dropdown-body.open{display:block}
+.contract-field{margin-top:14px}
+.contract-field-label{
+  font-family:inherit;font-size:10px;font-weight:500;
+  letter-spacing:0.08em;color:#9E9E9E;text-transform:uppercase;
+  margin-bottom:4px;display:block;
+}
+.contract-field-value{
+  font-family:inherit;font-size:14px;color:var(--navy);line-height:1.5;
+}
+
+/* ==============================
+   CONTRACT STEP SCREENS — NEW LAYOUT
+   ============================== */
+.contract-screen{
+  display:flex!important;flex-direction:column!important;
+  height:100dvh;overflow:hidden!important;
+  background:var(--white);
+}
+.contract-screen-top{padding:48px 24px 20px;flex-shrink:0}
+.contract-step-lbl{
+  font-family:inherit;font-size:12px;color:#9E9E9E;
+  margin-bottom:12px;display:block;
+}
+.contract-question{
+  font-family:inherit;font-size:24px;font-weight:700;color:var(--navy);
+  line-height:1.2;margin:0;
+}
+.contract-screen-body{
+  flex:1;padding:0 24px;
+  display:flex;flex-direction:column;min-height:0;
+}
+.contract-textarea{
+  flex:1;width:100%;box-sizing:border-box;
+  background:#F7F8FA;border:none;border-radius:20px;
+  padding:20px;
+  font-family:inherit;font-size:17px;color:var(--navy);
+  line-height:1.6;resize:none;outline:none;
+  transition:box-shadow 0.15s ease;
+  -webkit-appearance:none;
+}
+.contract-textarea:focus{box-shadow:0 0 0 2px var(--navy)}
+.contract-textarea::placeholder{color:#C0C8D0}
+.partner-answer-chip{
+  margin-top:10px;padding:10px 14px;
+  background:#F0F0F0;border-radius:12px;flex-shrink:0;
+}
+.partner-answer-label{
+  font-family:inherit;font-size:10px;font-weight:500;
+  letter-spacing:0.06em;color:#9E9E9E;text-transform:uppercase;
+  margin-bottom:3px;display:block;
+}
+.partner-answer-text{
+  font-family:inherit;font-size:13px;color:#6B7280;
+  font-style:italic;line-height:1.4;
+}
+.contract-name-lbl{
+  font-family:inherit;font-size:12px;font-weight:600;color:var(--g4);
+  letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;
+  display:block;flex-shrink:0;
+}
+.contract-name-input{
+  width:100%;border:none;border-bottom:1.5px solid var(--g2);
+  outline:none;font-family:inherit;font-size:16px;color:var(--navy);
+  background:transparent;padding:0 0 12px;margin-bottom:16px;
+  transition:border-color 0.15s;flex-shrink:0;
+}
+.contract-name-input:focus{border-color:var(--navy)}
+.contract-name-input::placeholder{color:var(--g3)}
+.contract-screen-footer{
+  flex-shrink:0;padding:16px 24px;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  background:var(--white);
+}
+.contract-screen-footer .btn-primary{
+  height:56px;border-radius:14px;
+  transition:transform 0.08s ease,opacity 0.08s ease;
+  padding:0;
+}
+.contract-screen-footer .btn-primary:active{transform:scale(0.97);opacity:0.9}
+.contract-screen-footer .btn-primary[disabled]{opacity:0.4;pointer-events:none;cursor:default}
+
+/* ==============================
+   TIME PILL GRID
+   ============================== */
+.time-pill-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;padding:0 24px;
+  align-content:start;margin-top:20px;
+  flex:1;
+}
+.time-pill{
+  width:100%;height:56px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:14px;border:1.5px solid var(--navy);
+  background:var(--white);
+  font-family:inherit;font-size:16px;font-weight:500;color:var(--navy);
+  cursor:pointer;
+  transition:all 0.08s ease;
+  -webkit-tap-highlight-color:transparent;
+  box-sizing:border-box;
+}
+.time-pill.selected{background:var(--navy);color:var(--white)}
+.time-pill:active{transform:scale(0.97)}
+
+/* ==============================
+   CHECK-IN: NOT TODAY LINK
+   ============================== */
+.not-today-btn{
+  background:none;border:none;font-family:inherit;
+  font-size:13px;color:var(--g4);cursor:pointer;
+  padding:4px;text-decoration:underline;
+  display:block;margin:10px auto 0;
+}
 </style>
 </head>
 <body>
@@ -1138,73 +1339,70 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 </div>
 
 <!-- CONTRACT STEP 1: What are you working on? -->
-<div id="screen-contract-1" class="screen contract-step-screen">
-  <div class="cs-header">
-    <p class="cs-step-label">Step 1 of 4</p>
-    <h2 class="cs-question">What are you working on?</h2>
+<div id="screen-contract-1" class="screen contract-screen">
+  <div class="contract-screen-top">
+    <span class="contract-step-lbl">Step 1 of 4</span>
+    <h2 class="contract-question">What are you working on?</h2>
   </div>
-  <div class="cs-scroll">
-    <p class="cs-name-label">Your name</p>
-    <input class="cs-name-input" type="text" id="c1-name" placeholder="What should we call you?"/>
-    <textarea class="cs-textarea" id="c1-working-on" placeholder="Be specific. Vague goals don't get done." style="margin-top:8px"></textarea>
-    <div class="cs-partner-hint">
-      <p class="cs-partner-hint-label">Jordan is working on</p>
-      <p class="cs-partner-hint-text" id="cp1-working-on">growing my freelance design business to full-time income</p>
+  <div class="contract-screen-body">
+    <span class="contract-name-lbl">Your name</span>
+    <input class="contract-name-input" type="text" id="c1-name" placeholder="What should we call you?"/>
+    <textarea class="contract-textarea" id="c1-working-on" placeholder="Be specific. Vague goals don't get done." oninput="enableContractBtn('cs1-btn',this.value)"></textarea>
+    <div class="partner-answer-chip">
+      <span class="partner-answer-label">Jordan is working on</span>
+      <p class="partner-answer-text" id="cp1-working-on">growing my freelance design business to full-time income</p>
     </div>
   </div>
-  <div class="cs-footer">
-    <button class="cs-btn" onclick="continueContract1()">Continue</button>
+  <div class="contract-screen-footer">
+    <button class="btn-primary" id="cs1-btn" onclick="continueContract1()" disabled>Continue</button>
   </div>
 </div>
 
 <!-- CONTRACT STEP 2: Call me out when -->
-<div id="screen-contract-2" class="screen contract-step-screen">
-  <div class="cs-header">
-    <p class="cs-step-label">Step 2 of 4</p>
-    <h2 class="cs-question">Call me out when...</h2>
+<div id="screen-contract-2" class="screen contract-screen">
+  <div class="contract-screen-top">
+    <span class="contract-step-lbl">Step 2 of 4</span>
+    <h2 class="contract-question">Call me out when...</h2>
   </div>
-  <div class="cs-scroll">
-    <textarea class="cs-textarea" id="c2-callout" placeholder="What does giving up look like for you?" style="margin-top:8px"></textarea>
-    <div class="cs-partner-hint">
-      <p class="cs-partner-hint-label">Call Jordan out when</p>
-      <p class="cs-partner-hint-text" id="cp2-callout">they start second-guessing themselves or disappear for more than a day</p>
+  <div class="contract-screen-body">
+    <textarea class="contract-textarea" id="c2-callout" placeholder="What does giving up look like for you?" oninput="enableContractBtn('cs2-btn',this.value)"></textarea>
+    <div class="partner-answer-chip">
+      <span class="partner-answer-label">Call Jordan out when</span>
+      <p class="partner-answer-text" id="cp2-callout">they start second-guessing themselves or disappear for more than a day</p>
     </div>
   </div>
-  <div class="cs-footer">
-    <button class="cs-btn" onclick="continueContract2()">Continue</button>
+  <div class="contract-screen-footer">
+    <button class="btn-primary" id="cs2-btn" onclick="continueContract2()" disabled>Continue</button>
   </div>
 </div>
 
 <!-- CONTRACT STEP 3: Check-in time slots -->
-<div id="screen-contract-3" class="screen contract-step-screen">
-  <div class="cs-header">
-    <p class="cs-step-label">Step 3 of 4</p>
-    <h2 class="cs-question">When do you want to check in?</h2>
-    <p style="font-size:13px;color:#9E9E9E;margin-top:-12px;margin-bottom:16px">Your partner will see this time.</p>
+<div id="screen-contract-3" class="screen contract-screen">
+  <div class="contract-screen-top">
+    <span class="contract-step-lbl">Step 3 of 4</span>
+    <h2 class="contract-question">When do you want to check in?</h2>
   </div>
-  <div class="cs-scroll">
-    <div class="time-slot-grid" id="time-slot-grid"></div>
-  </div>
-  <div class="cs-footer">
-    <button class="cs-btn" onclick="continueContract3()">Continue</button>
+  <div class="time-pill-grid" id="time-slot-grid"></div>
+  <div class="contract-screen-footer">
+    <button class="btn-primary" onclick="continueContract3()">Continue</button>
   </div>
 </div>
 
 <!-- CONTRACT STEP 4: Why is this time different? -->
-<div id="screen-contract-4" class="screen contract-step-screen">
-  <div class="cs-header">
-    <p class="cs-step-label">Step 4 of 4</p>
-    <h2 class="cs-question">Why is this time different?</h2>
+<div id="screen-contract-4" class="screen contract-screen">
+  <div class="contract-screen-top">
+    <span class="contract-step-lbl">Step 4 of 4</span>
+    <h2 class="contract-question">Why is this time different?</h2>
   </div>
-  <div class="cs-scroll">
-    <textarea class="cs-textarea" id="c4-because" placeholder="Say it like you mean it." style="margin-top:8px"></textarea>
-    <div class="cs-partner-hint">
-      <p class="cs-partner-hint-label">Jordan's why</p>
-      <p class="cs-partner-hint-text" id="cp4-why">I've played it safe my whole life and I'm done with that</p>
+  <div class="contract-screen-body">
+    <textarea class="contract-textarea" id="c4-because" placeholder="Say it like you mean it." oninput="enableContractBtn('cs4-btn',this.value)"></textarea>
+    <div class="partner-answer-chip">
+      <span class="partner-answer-label">Jordan's why</span>
+      <p class="partner-answer-text" id="cp4-why">I've played it safe my whole life and I'm done with that</p>
     </div>
   </div>
-  <div class="cs-footer">
-    <button class="cs-btn" onclick="signContract()">Sign the contract</button>
+  <div class="contract-screen-footer">
+    <button class="btn-primary" id="cs4-btn" onclick="signContract()" disabled>Sign the contract</button>
   </div>
 </div>
 
@@ -1215,63 +1413,27 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 
 <!-- HOME -->
 <div id="screen-home" class="screen">
-  <!-- Hero card -->
-  <div class="home-hero">
-    <div class="hero-left">
-      <span class="hero-label">STREAK</span>
-      <div class="hero-streak-number" id="streakDisplay">0</div>
-      <div class="hero-days-label">days</div>
-    </div>
-    <div class="hero-divider"></div>
-    <div class="hero-right">
-      <span class="hero-label">PARTNER</span>
-      <div class="hero-status-row">
-        <span class="hero-status-dot" id="partnerDot"></span>
-        <span class="hero-status-text" id="partnerStatus">Checked in</span>
+  <div class="home-content">
+    <div class="home-hero">
+      <div class="hero-left">
+        <span class="hero-label">STREAK</span>
+        <div class="hero-streak-number" id="streakDisplay">0</div>
+        <div class="hero-days-label">days</div>
       </div>
-      <span class="hero-together" id="heroTogether"></span>
-    </div>
-  </div>
-
-  <!-- Week strip -->
-  <div class="week-strip">
-    <p class="week-strip-label">THIS WEEK</p>
-    <div class="week-strip-days" id="weekStripDays"></div>
-  </div>
-
-  <!-- Check-in CTA -->
-  <div class="checkin-cta" id="checkin-card">
-    <p class="checkin-cta-label">TODAY'S CHECK-IN</p>
-    <p class="checkin-cta-scheduled" id="checkin-scheduled">Scheduled: 9:00 am</p>
-    <button class="btn-primary" onclick="openCheckin()">Check in now</button>
-  </div>
-
-  <!-- Rest of home content -->
-  <div class="screen-pad screen-top">
-    <div class="section-label">Your partner</div>
-    <div class="card" id="partner-card">
-      <div class="partner-mini-header">
-        <div class="avatar sm navy">JM</div>
-        <div>
-          <p class="partner-mini-name">Jordan</p>
-          <div class="checkin-status green sm">
-            <div class="status-dot green"></div>
-            <span>Checked in today</span>
-          </div>
+      <div class="hero-divider"></div>
+      <div class="hero-right">
+        <span class="hero-label">PARTNER</span>
+        <div class="hero-status-row">
+          <span class="hero-status-dot" id="partnerDot"></span>
+          <span class="hero-status-text" id="partnerStatus">Checked in</span>
         </div>
+        <span class="hero-together" id="heroTogether"></span>
       </div>
-      <p class="partner-note">"Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."</p>
     </div>
-
-    <div class="section-label">Skips this week</div>
-    <div class="card" id="skip-section">
-      <p class="skip-count">0/2 skips used</p>
-      <button class="btn-ghost" onclick="showSkipModal()" style="margin-top:10px">Not today</button>
-    </div>
-
-    <div id="notif-banner" class="notif-banner" style="margin-top:16px">
-      <p class="notif-banner-text">Enable reminders so you never miss a check-in.</p>
-      <button class="notif-banner-btn" onclick="requestNotifications()">Enable</button>
+  </div>
+  <div class="home-footer">
+    <div id="checkin-card">
+      <button class="btn-checkin-main" onclick="openCheckin()">Check in now</button>
     </div>
   </div>
 </div>
@@ -1294,6 +1456,9 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   <div class="ci-mode-tabs">
     <button class="ci-tab active" id="ci-tab-voice" onclick="switchCheckinMode('voice')">Voice</button>
     <button class="ci-tab" id="ci-tab-text" onclick="switchCheckinMode('text')">Text</button>
+  </div>
+  <div style="text-align:center">
+    <button class="not-today-btn" onclick="showSkipModal()">Not today</button>
   </div>
 
   <!-- Voice pane -->
@@ -1337,60 +1502,37 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 
 <!-- PARTNER TAB -->
 <div id="screen-partner" class="screen">
-  <div class="partner-hero">
-    <div class="avatar navy lg">JM</div>
-    <div class="partner-hero-info">
-      <h2>Jordan</h2>
-      <p>Building something</p>
-      <p class="matched-date" id="p-matched-date">Matched today</p>
-    </div>
-  </div>
-  <div class="screen-pad screen-top">
-    <div class="stats-row">
-      <div class="stat-cell"><div class="stat-num" id="p-streak">0</div><div class="stat-lbl">Day streak</div></div>
-      <div class="stat-cell"><div class="stat-num" id="p-skips">0</div><div class="stat-lbl">Skips this week</div></div>
-      <div class="stat-cell"><div class="stat-num" id="p-days">1</div><div class="stat-lbl">Days together</div></div>
-    </div>
-    <div class="section-label">Their commitment</div>
-    <div class="commitment-dropdown">
-      <button class="commitment-toggle" id="commitment-toggle-btn" onclick="togglePartnerDropdown()">
-        Jordan's contract
-        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="commitment-body" id="commitment-body">
-        <div class="commitment-inner">
-          <div class="commitment-row">
-            <p class="commitment-row-label">Working on</p>
-            <p class="commitment-row-val" id="p-working-on">growing my freelance design business to full-time income</p>
-          </div>
-          <div class="commitment-row">
-            <p class="commitment-row-label">Overcoming</p>
-            <p class="commitment-row-val" id="p-overcoming">fear of putting my work out there and charging what I'm worth</p>
-          </div>
-          <div class="commitment-row">
-            <p class="commitment-row-label">Call them out when</p>
-            <p class="commitment-row-val" id="p-callout">they start second-guessing or disappear</p>
-          </div>
+  <div class="partner-tab-wrap">
+    <div class="partner-note-card">
+      <div class="partner-note-header">
+        <div class="partner-avatar">JM</div>
+        <div>
+          <span class="partner-name-label">Jordan</span>
+          <span class="partner-checked-label">Checked in today</span>
         </div>
       </div>
+      <p class="partner-note-text">"Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."</p>
     </div>
-    <div class="section-label">Today</div>
-    <div class="card">
-      <div class="checkin-status green" style="margin-bottom:10px">
-        <div class="status-dot green"></div>
-        <span>Checked in</span>
+    <div class="contract-dropdown">
+      <div class="contract-dropdown-header" onclick="toggleContractDropdown()">
+        <span class="contract-dropdown-title">Jordan's contract</span>
+        <svg class="contract-chevron" id="contract-dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
       </div>
-      <p class="partner-note" style="border-top:none;padding-top:0;margin-top:0">"Tough morning but I sent out 3 proposals I'd been sitting on. Scared, but did it anyway. Your turn."</p>
-    </div>
-    <div class="section-label"></div>
-    <div class="card" style="padding:0 20px">
-      <div class="row-link" onclick="openContractView('screen-partner')">
-        View Full Contract
-        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-      <div class="row-link" onclick="showRematchModal()">
-        Request Rematch
-        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      <div class="contract-dropdown-body" id="contract-dropdown-body">
+        <div class="contract-field">
+          <span class="contract-field-label">Working on</span>
+          <p class="contract-field-value" id="pn-working-on">growing my freelance design business to full-time income</p>
+        </div>
+        <div class="contract-field">
+          <span class="contract-field-label">Overcoming</span>
+          <p class="contract-field-value" id="pn-overcoming">fear of putting my work out there and charging what I'm worth</p>
+        </div>
+        <div class="contract-field">
+          <span class="contract-field-label">Call them out when</span>
+          <p class="contract-field-value" id="pn-callout">they start second-guessing or disappear</p>
+        </div>
       </div>
     </div>
   </div>
@@ -1756,15 +1898,21 @@ function populateTimeSlots() {
   grid.innerHTML = '';
   times.forEach(function(t) {
     var btn = document.createElement('button');
-    btn.className = 'time-slot-pill' + (t === selectedTimeSlot ? ' selected' : '');
+    btn.className = 'time-pill' + (t === selectedTimeSlot ? ' selected' : '');
     btn.textContent = formatTime(t);
     btn.onclick = function() {
       selectedTimeSlot = t;
-      grid.querySelectorAll('.time-slot-pill').forEach(function(p) { p.classList.remove('selected'); });
+      grid.querySelectorAll('.time-pill').forEach(function(p) { p.classList.remove('selected'); });
       btn.classList.add('selected');
     };
     grid.appendChild(btn);
   });
+}
+
+// --- CONTRACT BUTTON ENABLE ---
+function enableContractBtn(btnId, val) {
+  var btn = document.getElementById(btnId);
+  if (btn) btn.disabled = (val.trim().length === 0);
 }
 
 function signContract() {
@@ -1810,10 +1958,7 @@ function renderHome() {
   checkDayRollover();
   renderStreakNumber();
   renderHeroPartner();
-  renderWeekStrip();
   renderCheckinCard();
-  renderSkipSection();
-  renderNotifBanner();
 }
 
 function renderStreakNumber() {
@@ -1903,28 +2048,18 @@ function renderCheckinCard() {
   if (!card) return;
   if (state.checkedInToday) {
     if (state.checkedInLate) {
-      card.innerHTML = '<p class="checkin-cta-label">TODAY\'S CHECK-IN</p>'
-        + '<div class="checkin-status amber"><div class="status-dot amber"></div><span>Checked in late</span></div>'
-        + '<button class="late-expand-btn" onclick="toggleLateNote()">Add a note on why</button>'
-        + '<div id="late-note-wrap" class="late-note-wrap hidden">'
-        + '<textarea id="late-note-input" rows="3" placeholder="Optional — Jordan will see this">' + (state.lateNote||'') + '</textarea>'
-        + '<button class="btn-sm" onclick="saveLateNote()">Save note</button>'
-        + '</div>';
+      card.innerHTML = '<button class="btn-checkin-main is-late" disabled>✓ Checked in late</button>';
     } else {
-      card.innerHTML = '<p class="checkin-cta-label">TODAY\'S CHECK-IN</p>'
-        + '<div class="checkin-status green"><div class="status-dot green"></div><span>Checked in today</span></div>'
-        + '<p class="checkin-sub">You showed up. Keep the streak going.</p>';
+      card.innerHTML = '<button class="btn-checkin-main is-checked" disabled>✓ Checked in today</button>';
     }
   } else {
-    var time = formatTime(state.user && state.user.checkinTime ? state.user.checkinTime : '09:00');
-    card.innerHTML = '<p class="checkin-cta-label">TODAY\'S CHECK-IN</p>'
-      + '<p class="checkin-cta-scheduled">Scheduled: ' + time + '</p>'
-      + '<button class="btn-primary" onclick="openCheckin()">Check in now</button>';
+    card.innerHTML = '<button class="btn-checkin-main" onclick="openCheckin()">Check in now</button>';
   }
 }
 
 function renderSkipSection() {
   var wrap = document.getElementById('skip-section');
+  if (!wrap) return;
   var used = state.skipsThisWeek || 0;
   if (used >= 2) {
     wrap.innerHTML = '<p class="skip-count">' + used + '/2 skips used this week</p>'
@@ -2109,6 +2244,10 @@ function saveLateNote() {
 
 // --- SKIP ---
 function showSkipModal() {
+  if ((state.skipsThisWeek || 0) >= 2) {
+    showToast('No skips left this week.');
+    return;
+  }
   document.getElementById('modal-overlay').classList.add('active');
   document.getElementById('modal-skip').classList.add('active');
   document.getElementById('modal-rematch').classList.remove('active');
@@ -2179,31 +2318,23 @@ function toggleNotifications(val) {
   else { state.notificationsEnabled = false; saveState(); showToast('Reminders turned off.'); }
 }
 
-// --- PARTNER DROPDOWN ---
-function togglePartnerDropdown() {
-  var btn = document.getElementById('commitment-toggle-btn');
-  var body = document.getElementById('commitment-body');
-  if (!btn || !body) return;
+// --- CONTRACT DROPDOWN (partner tab) ---
+function toggleContractDropdown() {
+  var body = document.getElementById('contract-dropdown-body');
+  var chevron = document.getElementById('contract-dropdown-chevron');
+  if (!body) return;
   var isOpen = body.classList.contains('open');
-  btn.classList.toggle('open', !isOpen);
   body.classList.toggle('open', !isOpen);
+  if (chevron) chevron.classList.toggle('open', !isOpen);
 }
 
 // --- PARTNER SCREEN ---
 function renderPartnerScreen() {
   var pc = (state.contract && state.contract.partner) ? state.contract.partner : buildPartnerContract();
   var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val || '—'; };
-  set('p-working-on', pc.workingOn);
-  set('p-overcoming', pc.overcoming);
-  set('p-callout', pc.callout);
-  set('p-streak', state.streak || 0);
-  set('p-skips', state.skipsThisWeek || 0);
-  var days = state.matchedDate ? Math.max(1, Math.floor((Date.now() - new Date(state.matchedDate)) / 86400000) + 1) : 1;
-  set('p-days', days);
-  var datel = document.getElementById('p-matched-date');
-  if (datel && state.matchedDate) {
-    datel.textContent = 'Matched ' + new Date(state.matchedDate).toLocaleDateString('en-US',{month:'long',day:'numeric'});
-  }
+  set('pn-working-on', pc.workingOn);
+  set('pn-overcoming', pc.overcoming);
+  set('pn-callout', pc.callout);
 }
 
 // --- PROFILE SCREEN ---
