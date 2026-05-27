@@ -561,34 +561,33 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
    HOME SCREEN
    ============================== */
 .home-hero{
-  background:var(--navy);border-radius:20px;
-  padding:28px 24px;
+  background:white;border:1.5px solid #1B2E4B;border-radius:16px;
+  padding:16px 20px;
   display:flex;flex-direction:row;align-items:center;
   margin:0;flex-shrink:0;
 }
 .hero-left{flex:1;display:flex;flex-direction:column;align-items:flex-start}
-.hero-divider{width:1px;height:80px;background:rgba(255,255,255,0.15);margin:0 20px;flex-shrink:0}
+.hero-divider{width:1px;height:60px;background:#E8E8E8;margin:0 20px;flex-shrink:0}
 .hero-right{flex:1;display:flex;flex-direction:column;align-items:flex-start}
 .hero-label{
-  font-family:inherit;font-size:10px;font-weight:500;
-  letter-spacing:0.08em;color:rgba(255,255,255,0.5);
-  margin-bottom:6px;display:block;
+  font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:500;
+  letter-spacing:0.08em;color:#9E9E9E;
+  margin-bottom:4px;display:block;
 }
 .hero-streak-number{
-  font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;
-  font-size:56px;font-weight:700;color:var(--white);
-  line-height:1;margin-bottom:4px;
-  -webkit-font-smoothing:antialiased;
+  font-family:'Space Grotesk',-apple-system,sans-serif;
+  font-size:40px;font-weight:700;color:#1B2E4B;
+  line-height:1;margin-bottom:2px;
 }
-.hero-days-label{font-family:inherit;font-size:13px;color:rgba(255,255,255,0.5)}
+.hero-days-label{font-family:'Space Grotesk',sans-serif;font-size:12px;color:#9E9E9E}
 .hero-status-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;margin-top:6px}
 .hero-status-dot{
-  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
   background:var(--success);display:inline-block;
 }
 .hero-status-dot.pending{background:var(--warning)}
-.hero-status-text{font-family:inherit;font-size:14px;font-weight:500;color:var(--white)}
-.hero-together{font-family:inherit;font-size:11px;color:rgba(255,255,255,0.4)}
+.hero-status-text{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:500;color:#1B2E4B}
+.hero-together{font-family:'Space Grotesk',sans-serif;font-size:11px;color:#9E9E9E}
 /* Week strip */
 .week-strip{margin:16px 20px 0}
 .week-strip-label{
@@ -1008,7 +1007,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   display:flex;align-items:center;gap:8px;
 }
 .tether-logo{
-  display:block;flex-shrink:0;
+  width:32px;height:32px;display:block;flex-shrink:0;
 }
 .home-title{
   font-family:'Space Grotesk',sans-serif;
@@ -1019,13 +1018,13 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   font-size:13px;color:#9E9E9E;font-weight:400;
 }
 .btn-checkin-main{
-  width:100%;height:64px;
-  background:var(--navy);color:var(--white);
+  width:100%;height:58px;
   border:none;border-radius:16px;
-  font-family:inherit;font-size:18px;font-weight:600;
-  cursor:pointer;letter-spacing:0.01em;
+  font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;
+  cursor:pointer;
+  background:#1B2E4B;color:white;
   flex-shrink:0;
-  transition:transform 0.08s ease,opacity 0.08s ease,background 0.2s ease;
+  transition:transform 0.08s ease,opacity 0.08s ease;
   -webkit-tap-highlight-color:transparent;
 }
 .btn-checkin-main:active{transform:scale(0.97);opacity:0.9}
@@ -1035,8 +1034,8 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
    HOME — MESSAGE THREAD
    ============================== */
 .message-thread{
-  flex:1;display:flex;flex-direction:column;justify-content:center;
-  gap:8px;min-height:0;
+  display:flex;flex-direction:column;
+  gap:8px;flex-shrink:0;
 }
 .message-sender-row{
   display:flex;align-items:center;gap:10px;
@@ -1140,6 +1139,39 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 }
 .contract-field-value{
   font-family:inherit;font-size:14px;color:var(--navy);line-height:1.5;
+}
+
+/* ==============================
+   PARTNER TAB — NUDGE SECTION
+   ============================== */
+.nudge-section{
+  margin:12px 20px 0;
+}
+.nudge-label{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;font-weight:500;letter-spacing:0.08em;
+  color:#9E9E9E;display:block;margin-bottom:10px;
+}
+.nudge-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;
+}
+.nudge-pill{
+  background:white;border:1.5px solid #1B2E4B;border-radius:999px;
+  padding:12px 10px;
+  font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:500;color:#1B2E4B;
+  cursor:pointer;text-align:center;
+  transition:all 0.08s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.nudge-pill:active{transform:scale(0.96)}
+.nudge-pill.sent{background:#1B2E4B;color:white;border-color:#1B2E4B;pointer-events:none}
+.nudge-confirmation{
+  display:flex;align-items:center;gap:6px;margin-top:10px;
+  opacity:0;transition:opacity 0.2s ease;
+}
+.nudge-confirmation.visible{opacity:1}
+.nudge-confirmation span{
+  font-family:'Space Grotesk',sans-serif;font-size:12px;color:#27AE60;font-weight:500;
 }
 
 /* ==============================
@@ -1502,6 +1534,9 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
       <span class="hero-together" id="heroTogether"></span>
     </div>
   </div>
+  <div id="checkin-card">
+    <button class="btn-checkin-main" onclick="openCheckin()">Check in now</button>
+  </div>
   <div class="message-thread">
     <div class="message-sender-row">
       <div class="message-avatar">JM</div>
@@ -1521,9 +1556,6 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
         You responded
       </div>
     </div>
-  </div>
-  <div id="checkin-card">
-    <button class="btn-checkin-main" onclick="openCheckin()">Check in now</button>
   </div>
 </div>
 
@@ -1622,6 +1654,21 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
           <span class="contract-field-label">Call them out when</span>
           <p class="contract-field-value" id="pn-callout">they start second-guessing or disappear</p>
         </div>
+      </div>
+    </div>
+    <div class="nudge-section">
+      <span class="nudge-label">SEND A NUDGE</span>
+      <div class="nudge-grid">
+        <button class="nudge-pill" data-message="You got this." onclick="sendNudge('You got this.')">You got this.</button>
+        <button class="nudge-pill" data-message="Don't skip today." onclick="sendNudge('Don\'t skip today.')">Don't skip today.</button>
+        <button class="nudge-pill" data-message="I'm waiting on you." onclick="sendNudge('I\'m waiting on you.')">I'm waiting on you.</button>
+        <button class="nudge-pill" data-message="Let's go." onclick="sendNudge('Let\'s go.')">Let's go.</button>
+      </div>
+      <div class="nudge-confirmation" id="nudgeConfirmation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#27AE60" stroke-width="1.5" width="14" height="14">
+          <path d="M5 12l5 5L19 7"/>
+        </svg>
+        <span id="nudgeConfirmationText">Nudge sent to Jordan.</span>
       </div>
     </div>
   </div>
@@ -2435,6 +2482,49 @@ function renderPartnerScreen() {
   set('pn-working-on', pc.workingOn);
   set('pn-overcoming', pc.overcoming);
   set('pn-callout', pc.callout);
+  renderNudgeSection();
+}
+
+function renderNudgeSection() {
+  var today = getTodayISO();
+  var stored = null;
+  try { stored = JSON.parse(localStorage.getItem('tether_nudge_sent_today')); } catch(e) {}
+
+  var pills = document.querySelectorAll('.nudge-pill');
+  var confirmation = document.getElementById('nudgeConfirmation');
+
+  if (stored && stored.date === today) {
+    pills.forEach(function(p) {
+      p.style.pointerEvents = 'none';
+      if (p.dataset.message === stored.message) { p.classList.add('sent'); }
+      else { p.classList.remove('sent'); }
+    });
+    if (confirmation) { confirmation.style.display = 'flex'; confirmation.classList.add('visible'); }
+  } else {
+    pills.forEach(function(p) {
+      p.classList.remove('sent');
+      p.style.pointerEvents = '';
+    });
+    if (confirmation) { confirmation.classList.remove('visible'); confirmation.style.display = 'none'; }
+  }
+}
+
+function sendNudge(message) {
+  var today = getTodayISO();
+  localStorage.setItem('tether_nudge_sent_today', JSON.stringify({ date: today, message: message }));
+
+  var pills = document.querySelectorAll('.nudge-pill');
+  pills.forEach(function(p) {
+    p.style.pointerEvents = 'none';
+    if (p.dataset.message === message) { p.classList.add('sent'); }
+    else { p.classList.remove('sent'); }
+  });
+
+  var confirmation = document.getElementById('nudgeConfirmation');
+  if (confirmation) {
+    confirmation.style.display = 'flex';
+    requestAnimationFrame(function() { confirmation.classList.add('visible'); });
+  }
 }
 
 // --- PROFILE SCREEN ---
