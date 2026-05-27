@@ -1031,6 +1031,20 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 }
 .btn-checkin-main:active{transform:scale(0.97);opacity:0.9}
 .btn-checkin-main.done{background:#F0F0F0;color:#9E9E9E;pointer-events:none;cursor:default}
+.checkin-countdown{
+  display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;
+}
+.countdown-inner{display:flex;align-items:baseline;gap:8px}
+.countdown-time{
+  font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;
+  color:#1B2E4B;line-height:1;
+}
+.countdown-label{
+  font-family:'Space Grotesk',sans-serif;font-size:12px;color:#9E9E9E;font-weight:400;
+}
+.countdown-jordan{
+  font-family:'Space Grotesk',sans-serif;font-size:11px;color:#27AE60;font-weight:500;
+}
 
 /* ==============================
    HOME — MESSAGE THREAD
@@ -1593,6 +1607,13 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
       </div>
     </div>
   </div>
+  <div class="checkin-countdown" id="checkinCountdown">
+    <div class="countdown-inner">
+      <span class="countdown-time" id="countdownTime">2h 14m</span>
+      <span class="countdown-label" id="countdownLabel">until your check-in window</span>
+    </div>
+    <span class="countdown-jordan">Jordan checked in at 7:14 AM</span>
+  </div>
   <div id="checkin-card">
     <button class="btn-checkin-main" onclick="openCheckin()">Check in now</button>
   </div>
@@ -1902,6 +1923,7 @@ let navHistory = [];
 let activeTab = 'screen-home';
 let obAnswers = { q1: null, q2: null, q3: null, q4: 3, q5: null, q6: null };
 let mediaRecorder = null, audioChunks = [], recordingInterval = null, recordingTimeout = null;
+let countdownInterval = null;
 let recordingStartTime = 0, pendingVoiceBase64 = null, pendingVoiceBlob = null, pendingVoiceDuration = 0;
 let selectedTimeSlot = '09:00';
 
@@ -2136,6 +2158,9 @@ function renderHome() {
   renderAvatarRings();
   renderCheckinCard();
   renderRepliedBadge();
+  updateCountdown();
+  if (countdownInterval) clearInterval(countdownInterval);
+  countdownInterval = setInterval(updateCountdown, 60000);
 }
 
 function renderHomeDate() {
@@ -2252,6 +2277,49 @@ function renderRepliedBadge() {
   var badge = document.getElementById('repliedBadge');
   if (!badge) return;
   badge.style.display = state.checkedInToday ? 'flex' : 'none';
+}
+
+function updateCountdown() {
+  var el = document.getElementById('checkinCountdown');
+  if (!el) return;
+
+  if (state.checkedInToday) {
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = '';
+
+  var scheduledTime = (state.user && state.user.checkinTime) ? state.user.checkinTime : '09:00';
+  var parts = scheduledTime.split(':');
+  var h = parseInt(parts[0]);
+  var m = parseInt(parts[1]);
+
+  var now = new Date();
+  var target = new Date();
+  target.setHours(h, m, 0, 0);
+
+  var diffMs = target - now;
+  var diffMins = Math.floor(diffMs / 60000);
+  var diffHours = Math.floor(diffMins / 60);
+  var remainMins = diffMins % 60;
+
+  var timeEl = document.getElementById('countdownTime');
+  var labelEl = document.getElementById('countdownLabel');
+  if (!timeEl || !labelEl) return;
+
+  if (diffMins < 0) {
+    timeEl.textContent = 'Missed';
+    timeEl.style.color = '#C0392B';
+    labelEl.textContent = 'check in to start fresh';
+  } else if (diffMins <= 60) {
+    timeEl.textContent = diffMins + 'm';
+    timeEl.style.color = '#E67E22';
+    labelEl.textContent = 'check in now — window is open';
+  } else {
+    timeEl.textContent = diffHours + 'h ' + remainMins + 'm';
+    timeEl.style.color = '#1B2E4B';
+    labelEl.textContent = 'until your check-in window';
+  }
 }
 
 function renderSkipSection() {
