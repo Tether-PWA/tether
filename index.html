@@ -1369,15 +1369,53 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:40px 32px;text-align:center">
     <p class="splash-wordmark">tether</p>
     <p class="splash-tagline">Show up for someone. They'll show up for you.</p>
-    <button class="splash-cta" onclick="showScreen('screen-ob-a','forward')">Get Started</button>
+    <button class="splash-cta" onclick="showScreen('screen-ob-0','forward')">Get Started</button>
     <button class="splash-signin" onclick="showToast('Sign in coming soon.')">Already have an account? Sign in</button>
+  </div>
+</div>
+
+<!-- ONBOARDING 0: What language do you speak? -->
+<div id="screen-ob-0" class="screen ob-screen">
+  <div class="ob-content">
+    <p class="ob-step-label">1 of 4</p>
+    <h2 class="ob-question">What language do you speak?</h2>
+    <p class="ob-subtext">We use this to match you with a compatible partner.</p>
+    <div class="ob-pills">
+      <button class="ob-pill" data-val="English" onclick="selectObPill(this,'q_lang')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        English
+      </button>
+      <button class="ob-pill" data-val="Spanish" onclick="selectObPill(this,'q_lang')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        Spanish
+      </button>
+      <button class="ob-pill" data-val="French" onclick="selectObPill(this,'q_lang')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        French
+      </button>
+      <button class="ob-pill" data-val="Mandarin" onclick="selectObPill(this,'q_lang')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        Mandarin
+      </button>
+      <button class="ob-pill" data-val="Portuguese" onclick="selectObPill(this,'q_lang')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        Portuguese
+      </button>
+      <button class="ob-pill" data-val="Arabic" onclick="selectObPill(this,'q_lang')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        Arabic
+      </button>
+    </div>
+  </div>
+  <div class="ob-footer">
+    <button class="ob-footer-btn" id="ob-0-continue" onclick="continueObLang()" disabled>Continue</button>
   </div>
 </div>
 
 <!-- ONBOARDING A: When are you most active? -->
 <div id="screen-ob-a" class="screen ob-screen">
   <div class="ob-content">
-    <p class="ob-step-label">1 of 3</p>
+    <p class="ob-step-label">2 of 4</p>
     <h2 class="ob-question">When are you most active?</h2>
     <p class="ob-subtext">This sets the window for your daily check-ins with your partner.</p>
     <div class="ob-pills">
@@ -1407,7 +1445,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 <!-- ONBOARDING B: How direct do you want your partner to be? -->
 <div id="screen-ob-b" class="screen ob-screen">
   <div class="ob-content">
-    <p class="ob-step-label">2 of 3</p>
+    <p class="ob-step-label">3 of 4</p>
     <h2 class="ob-question">How direct do you want your partner to be?</h2>
     <p class="ob-subtext">This shapes how your partner gives you feedback.</p>
     <div class="ob-pills">
@@ -1426,7 +1464,7 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 <!-- ONBOARDING C: How do you prefer to check in? -->
 <div id="screen-ob-c" class="screen ob-screen">
   <div class="ob-content">
-    <p class="ob-step-label">3 of 3</p>
+    <p class="ob-step-label">4 of 4</p>
     <h2 class="ob-question">How do you prefer to check in?</h2>
     <p class="ob-subtext">Your partner will match your preferred format.</p>
     <div class="ob-pills">
@@ -1965,7 +2003,7 @@ const DEFAULT_STATE = {
 let state = {};
 let navHistory = [];
 let activeTab = 'screen-home';
-let obAnswers = { q1: null, q2: null, q3: null, q4: 3, q5: null, q6: null };
+let obAnswers = { q_lang: null, q1: null, q2: null, q3: null, q4: 3, q5: null, q6: null };
 let mediaRecorder = null, audioChunks = [], recordingInterval = null, recordingTimeout = null;
 let countdownInterval = null;
 let recordingStartTime = 0, pendingVoiceBase64 = null, pendingVoiceBlob = null, pendingVoiceDuration = 0;
@@ -2052,6 +2090,13 @@ function selectObPill(el, q) {
   el.classList.add('selected');
   var btn = el.closest('.screen').querySelector('.ob-footer-btn');
   if (btn) btn.disabled = false;
+}
+
+function continueObLang() {
+  if (!obAnswers.q_lang) return;
+  localStorage.setItem('tether_language', obAnswers.q_lang);
+  localStorage.setItem('tether_language_matching_active', 'false');
+  showScreen('screen-ob-a', 'forward');
 }
 
 function continueObA() {
