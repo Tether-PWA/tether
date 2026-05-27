@@ -433,6 +433,33 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 .ob-pill svg{width:20px;height:20px;stroke:var(--navy);fill:none;stroke-width:1.5;flex-shrink:0;transition:stroke 0.1s ease}
 .ob-pill-center{justify-content:center}
 
+/* Language multi-select pills */
+.pill-option{
+  display:flex;align-items:center;gap:12px;
+  width:calc(100% - 48px);margin:0 auto 12px;
+  padding:16px 20px;border-radius:999px;
+  cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:500;
+  background:white;border:1.5px solid #E0E0E0;color:#1B2E4B;
+  transition:all 0.08s ease;
+  -webkit-tap-highlight-color:transparent;
+  box-sizing:border-box;
+}
+.pill-option:active{transform:scale(0.97)}
+.pill-option svg{width:20px;height:20px;stroke:#1B2E4B;fill:none;stroke-width:1.5;flex-shrink:0;transition:stroke 0.1s}
+.language-pill.primary{background:#1B2E4B;border-color:#1B2E4B;color:white}
+.language-pill.primary svg{stroke:white}
+.language-pill.secondary{background:#E8EDF2;border-color:#1B2E4B;color:#1B2E4B}
+.language-pill.disabled{opacity:0.4;pointer-events:none}
+.pill-badge{
+  font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:500;
+  border-radius:999px;padding:2px 8px;margin-left:auto;flex-shrink:0;
+}
+.language-counter{
+  font-family:'Space Grotesk',sans-serif;font-size:12px;color:#9E9E9E;
+  text-align:center;display:block;margin-top:4px;
+}
+
 /* ==============================
    MATCHING SCREEN
    ============================== */
@@ -1379,36 +1406,43 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
   <div class="ob-content">
     <p class="ob-step-label">1 of 4</p>
     <h2 class="ob-question">What language do you speak?</h2>
-    <p class="ob-subtext">We use this to match you with a compatible partner.</p>
+    <p class="ob-subtext" style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:400;color:#9E9E9E;text-align:center;margin-bottom:24px">Tap your preferred language, and any others you feel comfortable communicating in.</p>
     <div class="ob-pills">
-      <button class="ob-pill" data-val="English" onclick="selectObPill(this,'q_lang')">
+      <div class="pill-option language-pill" data-language="English" onclick="handleLanguageTap('English',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
         English
-      </button>
-      <button class="ob-pill" data-val="Spanish" onclick="selectObPill(this,'q_lang')">
+        <span class="pill-badge" style="display:none"></span>
+      </div>
+      <div class="pill-option language-pill" data-language="Spanish" onclick="handleLanguageTap('Spanish',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
         Spanish
-      </button>
-      <button class="ob-pill" data-val="French" onclick="selectObPill(this,'q_lang')">
+        <span class="pill-badge" style="display:none"></span>
+      </div>
+      <div class="pill-option language-pill" data-language="French" onclick="handleLanguageTap('French',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
         French
-      </button>
-      <button class="ob-pill" data-val="Mandarin" onclick="selectObPill(this,'q_lang')">
+        <span class="pill-badge" style="display:none"></span>
+      </div>
+      <div class="pill-option language-pill" data-language="Mandarin" onclick="handleLanguageTap('Mandarin',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
         Mandarin
-      </button>
-      <button class="ob-pill" data-val="Portuguese" onclick="selectObPill(this,'q_lang')">
+        <span class="pill-badge" style="display:none"></span>
+      </div>
+      <div class="pill-option language-pill" data-language="Portuguese" onclick="handleLanguageTap('Portuguese',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
         Portuguese
-      </button>
-      <button class="ob-pill" data-val="Arabic" onclick="selectObPill(this,'q_lang')">
+        <span class="pill-badge" style="display:none"></span>
+      </div>
+      <div class="pill-option language-pill" data-language="Arabic" onclick="handleLanguageTap('Arabic',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
         Arabic
-      </button>
+        <span class="pill-badge" style="display:none"></span>
+      </div>
     </div>
+    <span class="language-counter" id="languageCounter">Select up to 3</span>
   </div>
   <div class="ob-footer">
-    <button class="ob-footer-btn" id="ob-0-continue" onclick="continueObLang()" disabled>Continue</button>
+    <button class="ob-footer-btn" id="languageContinueBtn" onclick="continueObLang()" disabled>Continue</button>
   </div>
 </div>
 
@@ -2004,6 +2038,7 @@ let state = {};
 let navHistory = [];
 let activeTab = 'screen-home';
 let obAnswers = { q_lang: null, q1: null, q2: null, q3: null, q4: 3, q5: null, q6: null };
+let languageSelections = [];
 let mediaRecorder = null, audioChunks = [], recordingInterval = null, recordingTimeout = null;
 let countdownInterval = null;
 let recordingStartTime = 0, pendingVoiceBase64 = null, pendingVoiceBlob = null, pendingVoiceDuration = 0;
@@ -2092,9 +2127,82 @@ function selectObPill(el, q) {
   if (btn) btn.disabled = false;
 }
 
+function handleLanguageTap(language, pillEl) {
+  var index = languageSelections.indexOf(language);
+  if (index > -1) {
+    languageSelections.splice(index, 1);
+  } else {
+    if (languageSelections.length >= 3) return;
+    languageSelections.push(language);
+  }
+  updateLanguagePills();
+  updateContinueButton();
+  updateCounter();
+}
+
+function updateLanguagePills() {
+  document.querySelectorAll('.language-pill').forEach(function(pill) {
+    var lang = pill.dataset.language;
+    var index = languageSelections.indexOf(lang);
+    var badge = pill.querySelector('.pill-badge');
+    pill.classList.remove('primary', 'secondary', 'disabled');
+    if (index === 0) {
+      pill.classList.add('primary');
+      if (badge) {
+        badge.textContent = 'Primary';
+        badge.style.background = 'rgba(255,255,255,0.2)';
+        badge.style.color = 'white';
+        badge.style.display = 'block';
+      }
+    } else if (index > 0) {
+      pill.classList.add('secondary');
+      if (badge) {
+        badge.textContent = 'Also speaks';
+        badge.style.background = 'rgba(26,46,75,0.1)';
+        badge.style.color = '#1B2E4B';
+        badge.style.display = 'block';
+      }
+    } else {
+      if (badge) badge.style.display = 'none';
+      if (languageSelections.length >= 3) pill.classList.add('disabled');
+    }
+  });
+}
+
+function updateContinueButton() {
+  var btn = document.getElementById('languageContinueBtn');
+  if (!btn) return;
+  if (languageSelections.length >= 1) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.4';
+    btn.style.pointerEvents = 'none';
+  }
+}
+
+function updateCounter() {
+  var el = document.getElementById('languageCounter');
+  if (!el) return;
+  var remaining = 3 - languageSelections.length;
+  if (languageSelections.length === 0) {
+    el.textContent = 'Select up to 3';
+    el.style.color = '#9E9E9E';
+  } else if (remaining === 0) {
+    el.textContent = 'Maximum reached';
+    el.style.color = '#1B2E4B';
+  } else {
+    el.textContent = remaining + ' more available';
+    el.style.color = '#9E9E9E';
+  }
+}
+
 function continueObLang() {
-  if (!obAnswers.q_lang) return;
-  localStorage.setItem('tether_language', obAnswers.q_lang);
+  if (languageSelections.length === 0) return;
+  localStorage.setItem('tether_language', languageSelections[0]);
+  localStorage.setItem('tether_languages_all', JSON.stringify(languageSelections));
   localStorage.setItem('tether_language_matching_active', 'false');
   showScreen('screen-ob-a', 'forward');
 }
