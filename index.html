@@ -752,6 +752,31 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 .ci-char-hint{font-size:12px;color:var(--g4);margin-bottom:16px}
 
 /* ==============================
+   CHECK-IN — HOLD-TO-RECORD VOICE AREA
+   ============================== */
+.voice-area{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  padding:24px 0;
+}
+.voice-ring{
+  width:96px;height:96px;border-radius:50%;
+  border:1.5px solid #1B2E4B;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform 0.15s ease,background 0.15s ease;
+}
+.voice-ring.recording{background:#1B2E4B;transform:scale(1.08)}
+.voice-ring.recording svg{stroke:white}
+.voice-btn{
+  width:72px;height:72px;border-radius:50%;
+  background:#F7F8FA;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+.voice-hint{font-family:'Space Grotesk',sans-serif;font-size:13px;color:#9E9E9E}
+.voice-timer{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;color:#1B2E4B}
+
+/* ==============================
    PARTNER SCREEN
    ============================== */
 .partner-hero{
@@ -1045,6 +1070,13 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 .countdown-jordan{
   font-family:'Space Grotesk',sans-serif;font-size:11px;color:#27AE60;font-weight:500;
 }
+.checkin-countdown.missed{
+  background:#FDF2F2;border:1.5px solid #EFAAAA;
+  border-radius:12px;padding:10px 16px;
+  width:100%;box-sizing:border-box;
+}
+.checkin-countdown.missed .countdown-inner{justify-content:center}
+.checkin-countdown.missed .countdown-jordan{color:#E57373;opacity:0.8}
 
 /* ==============================
    HOME — MESSAGE THREAD
@@ -1644,7 +1676,19 @@ input[type="checkbox"].toggle:checked::after{transform:translateX(18px)}
 
   <!-- Voice pane -->
   <div class="ci-voice-pane ci-body" id="ci-voice-pane">
-    <div id="ci-record-area" style="text-align:center">
+    <div class="voice-area" id="voiceArea">
+      <div class="voice-ring" id="voiceRing">
+        <button class="voice-btn" id="voiceBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28">
+            <rect x="9" y="2" width="6" height="11" rx="3"/>
+            <path d="M5 10a7 7 0 0014 0M12 19v3M8 22h8"/>
+          </svg>
+        </button>
+      </div>
+      <span class="voice-hint" id="voiceHint">Hold to record</span>
+      <span class="voice-timer" id="voiceTimer" style="display:none">0:00</span>
+    </div>
+    <div id="ci-record-area" class="hidden" style="text-align:center">
       <p class="ci-timer" id="ci-timer">0:00</p>
       <div class="waveform" id="ci-waveform">
         <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
@@ -2190,7 +2234,7 @@ function renderAvatarRings() {
     if (userRing) { userRing.classList.remove('pending'); userRing.classList.add('done'); }
     if (userTs) {
       userTs.classList.remove('pending-label');
-      userTs.textContent = state.lastCheckInTime || '';
+      userTs.textContent = state.lastCheckInTime || localStorage.getItem('tether_last_checkin_time') || '';
     }
   } else {
     if (userRing) { userRing.classList.remove('done'); userRing.classList.add('pending'); }
@@ -2308,14 +2352,20 @@ function updateCountdown() {
   if (!timeEl || !labelEl) return;
 
   if (diffMins < 0) {
-    timeEl.textContent = 'Missed';
-    timeEl.style.color = '#C0392B';
-    labelEl.textContent = 'check in to start fresh';
+    el.classList.add('missed');
+    timeEl.textContent = 'Not yet';
+    timeEl.style.color = '#E57373';
+    labelEl.textContent = 'still time — check in now';
+    labelEl.style.color = '#E57373';
   } else if (diffMins <= 60) {
+    el.classList.remove('missed');
+    labelEl.style.color = '';
     timeEl.textContent = diffMins + 'm';
     timeEl.style.color = '#E67E22';
     labelEl.textContent = 'check in now — window is open';
   } else {
+    el.classList.remove('missed');
+    labelEl.style.color = '';
     timeEl.textContent = diffHours + 'h ' + remainMins + 'm';
     timeEl.style.color = '#1B2E4B';
     labelEl.textContent = 'until your check-in window';
@@ -2377,7 +2427,16 @@ function resetRecordingUI() {
   if (timer) timer.textContent = '0:00';
   if (wf) wf.classList.remove('active');
   if (pb) pb.classList.add('hidden');
-  if (ra) ra.classList.remove('hidden');
+  if (ra) ra.classList.add('hidden'); // old area stays hidden
+  // Reset new voice area
+  var va = document.getElementById('voiceArea');
+  var vr = document.getElementById('voiceRing');
+  var vh = document.getElementById('voiceHint');
+  var vt = document.getElementById('voiceTimer');
+  if (va) va.style.display = '';
+  if (vr) vr.classList.remove('recording');
+  if (vh) { vh.style.display = ''; vh.textContent = 'Hold to record'; }
+  if (vt) vt.style.display = 'none';
 }
 
 async function toggleRecording() {
@@ -2386,6 +2445,32 @@ async function toggleRecording() {
   } else {
     await startRecording();
   }
+}
+
+function initVoiceHold() {
+  var btn = document.getElementById('voiceBtn');
+  if (!btn) return;
+  // Hide voice tab and force text if MediaRecorder not supported
+  if (!window.MediaRecorder) {
+    var tabVoice = document.getElementById('ci-tab-voice');
+    if (tabVoice) tabVoice.style.display = 'none';
+    switchCheckinMode('text');
+    return;
+  }
+  function onHoldStart(e) {
+    e.preventDefault();
+    if (mediaRecorder && mediaRecorder.state === 'recording') return;
+    startRecording();
+  }
+  function onHoldEnd(e) {
+    e.preventDefault();
+    if (mediaRecorder && mediaRecorder.state === 'recording') stopRecording(false);
+  }
+  btn.addEventListener('mousedown', onHoldStart);
+  btn.addEventListener('touchstart', onHoldStart, { passive: false });
+  btn.addEventListener('mouseup', onHoldEnd);
+  btn.addEventListener('touchend', onHoldEnd, { passive: false });
+  btn.addEventListener('mouseleave', onHoldEnd);
 }
 
 async function startRecording() {
@@ -2407,11 +2492,21 @@ async function startRecording() {
     mediaRecorder.start();
     document.getElementById('ci-record-btn').classList.add('recording');
     document.getElementById('ci-waveform').classList.add('active');
+    // Voice area — recording state
+    var vr = document.getElementById('voiceRing');
+    var vh = document.getElementById('voiceHint');
+    var vt = document.getElementById('voiceTimer');
+    if (vr) vr.classList.add('recording');
+    if (vh) vh.style.display = 'none';
+    if (vt) { vt.style.display = ''; vt.textContent = '0:00'; }
     var secs = 0;
     recordingInterval = setInterval(function() {
       secs++;
       var m = Math.floor(secs/60); var s = secs%60;
-      document.getElementById('ci-timer').textContent = m + ':' + (s<10?'0':'') + s;
+      var ts = m + ':' + (s<10?'0':'') + s;
+      document.getElementById('ci-timer').textContent = ts;
+      var vtEl = document.getElementById('voiceTimer');
+      if (vtEl) vtEl.textContent = ts;
     }, 1000);
     recordingTimeout = setTimeout(function() { stopRecording(false); }, 60000);
   } catch(e) {
@@ -2428,11 +2523,15 @@ function stopRecording(silent) {
       document.getElementById('ci-record-btn').classList.remove('recording');
       document.getElementById('ci-waveform').classList.remove('active');
     }
+    var vr = document.getElementById('voiceRing');
+    if (vr) vr.classList.remove('recording');
   }
 }
 
 function showPlaybackUI() {
   document.getElementById('ci-record-area').classList.add('hidden');
+  var va = document.getElementById('voiceArea');
+  if (va) va.style.display = 'none';
   document.getElementById('ci-playback').classList.remove('hidden');
   document.getElementById('ci-play-duration').textContent = formatDuration(pendingVoiceDuration);
 }
@@ -2456,6 +2555,7 @@ function sendVoiceNote() {
 function sendTextNote() {
   var text = document.getElementById('ci-text-input').value.trim();
   if (!text) { showToast('Write something first.'); return; }
+  localStorage.setItem('tether_last_checkin_text', text);
   completeCheckIn();
 }
 
@@ -2465,10 +2565,15 @@ function completeCheckIn() {
   state.checkedInLate = late;
   state.lastCheckInDate = getTodayISO();
   var now = new Date();
-  state.lastCheckInTime = now.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+  var timeStr = now.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+  state.lastCheckInTime = timeStr;
   if (!late) { state.streak = (state.streak || 0) + 1; }
   else if (state.streak === 0) { state.streak = 1; }
   saveState();
+  // Persist explicit localStorage keys for cross-session reads
+  localStorage.setItem('tether_last_checkin_date', getTodayISO());
+  localStorage.setItem('tether_last_checkin_time', timeStr);
+  localStorage.setItem('tether_streak', state.streak);
   popScreen();
   setTimeout(function() {
     renderHome();
@@ -2778,6 +2883,9 @@ function init() {
   } else {
     showScreen('screen-splash', 'tab');
   }
+
+  // Wire up hold-to-record voice button
+  initVoiceHold();
 
   // Re-render streak number once Space Grotesk is ready (prevents "U" flash)
   document.fonts.ready.then(function() { renderStreakNumber(); });
